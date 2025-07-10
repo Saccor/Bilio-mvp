@@ -22,7 +22,7 @@ Bilio MVP is a cutting-edge vehicle analysis platform that transforms basic vehi
 - **Professional Swedish Interface**: Tailored for the Swedish automotive market
 
 ### **🔄 Advanced Comparison Tools**
-- **Multi-Vehicle Comparison**: Compare up to 4 vehicles side-by-side
+- **Multi-Vehicle Comparison**: Compare multiple vehicles side-by-side
 - **Smart Comparison Table**: Key metrics at a glance
 - **Dynamic Vehicle Management**: Add/remove vehicles on the fly
 - **Visual Comparison**: Easy-to-understand comparison interface
@@ -83,6 +83,50 @@ Bilio MVP is a cutting-edge vehicle analysis platform that transforms basic vehi
 - **Turbopack** - Ultra-fast bundling
 - **TypeScript Strict Mode** - Enhanced type safety
 
+## 🏗 **Project Architecture**
+
+This project follows modern React/Next.js best practices with a clean, modular architecture:
+
+```
+src/
+├── app/
+│   ├── page.tsx              # Main application page
+│   ├── layout.tsx            # Root layout
+│   ├── globals.css           # Global styles
+│   └── api/
+│       └── vehicle/
+│           └── route.ts      # Vehicle API endpoint
+├── components/
+│   ├── ui/                   # Reusable UI components
+│   │   ├── StatusBadge.tsx   # Color-coded status indicators
+│   │   ├── StatusCard.tsx    # Boolean status with visual indicator
+│   │   ├── InfoSection.tsx   # Styled section with title
+│   │   ├── InfoRow.tsx       # Key-value pair display
+│   │   └── ComparisonRow.tsx # Table row for vehicle comparison
+│   ├── tabs/                 # Specialized tab components
+│   │   ├── OverviewTab.tsx   # Basic vehicle information
+│   │   ├── TechnicalTab.tsx  # Technical specifications
+│   │   ├── FinancialTab.tsx  # Pricing and cost analysis
+│   │   ├── HistoryTab.tsx    # Vehicle history and safety
+│   │   └── FutureTab.tsx     # Future value predictions
+│   ├── VehicleOverviewCard.tsx # Vehicle summary card
+│   ├── DetailedAnalysis.tsx    # Tabbed analysis interface
+│   └── ComparisonTable.tsx     # Side-by-side comparison
+├── types/
+│   └── vehicle.ts            # TypeScript interfaces
+├── utils/
+│   └── vehicle-helpers.ts    # Utility functions
+└── public/                   # Static assets
+```
+
+### **Architecture Benefits**
+
+- **🔧 Modularity**: Each component has a single responsibility
+- **♻️ Reusability**: UI components can be used throughout the app
+- **🧪 Testability**: Components can be tested in isolation
+- **📈 Scalability**: Easy to add new features without affecting existing code
+- **👥 Team Collaboration**: Multiple developers can work on different components
+
 ## 🚀 **Getting Started**
 
 ### **Prerequisites**
@@ -103,31 +147,19 @@ cd bilio-mvp-temp
 npm install
 ```
 
-3. **Environment Setup**
-Create a `.env.local` file in the root directory:
-```env
-# Car.info API Configuration
-CAR_INFO_API_KEY=your_car_info_api_key_here
-CAR_INFO_BASE_URL=https://api.car.info
-
-# Next.js Configuration
-NEXT_PUBLIC_IDENTIFIER=your_identifier_here
-NEXT_PUBLIC_KEY=your_api_key_here
-```
-
-4. **Start Development Server**
+3. **Start Development Server**
 ```bash
 npm run dev
 ```
 
-5. **Open Application**
-Navigate to `http://localhost:3000` in your browser.
+4. **Open Application**
+Navigate to `http://localhost:3000` in your browser (or the port shown in terminal).
 
 ## 📖 **Usage Guide**
 
 ### **Basic Vehicle Lookup**
 1. Enter one or more Swedish registration numbers (e.g., `VVV999`)
-2. Click "Analysera fordon" to fetch vehicle data
+2. Click "Sök fordon" to fetch vehicle data
 3. View summary cards for each vehicle
 4. Click on any vehicle card for detailed analysis
 
@@ -139,18 +171,18 @@ Navigate to `http://localhost:3000` in your browser.
 - **Framtid**: Future value and maintenance insights
 
 ### **Vehicle Comparison**
-1. Add multiple vehicles using "+ Lägg till fordon"
+1. Add multiple vehicles using "+ Lägg till jämförelse"
 2. Enter registration numbers for each vehicle
 3. View side-by-side comparison in the comparison table
-4. Remove vehicles with the × button if needed
+4. Remove vehicles with "Ta bort" button if needed
 
 ## 🔌 **API Integration**
 
 ### **Car.info API**
 The platform integrates with the Car.info API for comprehensive vehicle data:
 
-- **Demo Endpoint**: `https://api.car.info/v2/app/demo/license-plate/S/VVV999`
-- **Real Data Extraction**: 70% real data from API, 30% intelligent mock data
+- **Demo Endpoint**: `https://api.car.info/v2/app/demo/license-plate/S/{registration}`
+- **Real Data Extraction**: Extracts real vehicle specifications from API
 - **Comprehensive Attributes**: 100+ vehicle specifications
 - **Swedish Market Focus**: Optimized for Swedish registration numbers
 
@@ -158,24 +190,47 @@ The platform integrates with the Car.info API for comprehensive vehicle data:
 - **Smart Attribute Parsing**: Extracts relevant data from extensive API response
 - **Type-Safe Integration**: Full TypeScript support for API responses
 - **Intelligent Fallbacks**: Graceful handling of missing data
-- **Real-time Updates**: Live data fetching and display
+- **Error Handling**: User-friendly error messages
 
 ## 📊 **Data Coverage**
 
-### **Real Data from Car.info API (70%)**
+### **Real Data from Car.info API**
 - ✅ Vehicle identification (brand, model, variant)
 - ✅ Engine specifications (power, type, fuel)
-- ✅ Technical attributes and dimensions
-- ✅ Safety ratings and Euro NCAP scores
-- ✅ Equipment and feature packages
-- ✅ Vehicle history indicators
+- ✅ Technical attributes and year information
+- ✅ Registration and basic vehicle data
 
-### **Intelligent Mock Data (30%)**
+### **Enhanced Mock Data for Demo**
 - 🎭 Market pricing and valuations
 - 🎭 Operating costs (tax, insurance, maintenance)
 - 🎭 Future value predictions
 - 🎭 Market position analysis
-- 🎭 Depreciation calculations
+- 🎭 Technical specifications and dimensions
+- 🎭 Safety ratings and vehicle history
+
+## 🧪 **Development**
+
+### **Available Scripts**
+```bash
+npm run dev         # Start development server
+npm run build       # Build for production
+npm run start       # Start production server
+npm run lint        # Run ESLint
+npm run type-check  # Check TypeScript types
+```
+
+### **Adding New Components**
+1. Create component in appropriate directory (`ui/`, `tabs/`, or root `components/`)
+2. Export from component file
+3. Import where needed
+4. Follow existing TypeScript patterns
+
+### **Code Style**
+- Use TypeScript for all components
+- Follow existing naming conventions
+- Implement proper prop interfaces
+- Use Tailwind CSS for styling
+- Include proper error handling
 
 ## 🔮 **Future Enhancements**
 
@@ -184,61 +239,35 @@ The platform integrates with the Car.info API for comprehensive vehicle data:
 - **Advanced Analytics**: Market trends and insights
 - **PDF Report Generation**: Exportable vehicle reports
 - **User Authentication**: Personal vehicle collections
-- **Mobile App**: Native iOS/Android applications
+- **Mobile Responsiveness**: Enhanced mobile experience
 - **API Expansion**: Integration with additional data sources
 
-### **Business Features**
-- **Dealer Dashboard**: Inventory management tools
-- **Bulk Analysis**: Process multiple vehicles simultaneously
-- **Custom Branding**: White-label solutions
-- **Advanced Filtering**: Search and filter capabilities
-- **Historical Tracking**: Price and value tracking over time
-
-## 🏗 **Project Structure**
-
-```
-bilio-mvp-temp/
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   │   └── vehicle/
-│   │   │       └── route.ts          # Vehicle API proxy
-│   │   ├── globals.css               # Global styles
-│   │   ├── layout.tsx                # Root layout
-│   │   └── page.tsx                  # Main application
-│   └── components/                   # Reusable components
-├── public/                           # Static assets
-├── .env.local                        # Environment variables
-├── next.config.ts                    # Next.js configuration
-├── tailwind.config.ts                # Tailwind configuration
-├── tsconfig.json                     # TypeScript configuration
-└── package.json                      # Dependencies and scripts
-```
-
-## 🛡 **Security & Best Practices**
-
-- **Environment Variables**: Secure API key management
-- **Type Safety**: Full TypeScript implementation
-- **Error Handling**: Comprehensive error management
-- **Rate Limiting**: Built-in API request optimization
-- **Data Validation**: Input sanitization and validation
-
-## 📄 **License**
-
-This project is proprietary software developed for the Swedish automotive market.
+### **Technical Improvements**
+- **Unit Testing**: Jest and React Testing Library
+- **Storybook**: Component documentation
+- **Error Boundaries**: Better error handling
+- **Performance Optimization**: Code splitting and lazy loading
+- **PWA Features**: Offline functionality
 
 ## 🤝 **Contributing**
 
-This is a private MVP project. For contributions or suggestions, please contact the development team.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📞 **Support**
+## 📄 **License**
 
-For technical support or business inquiries:
-- **Developer**: sacco.rezais@gmail.com
-- **GitHub**: saccor
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 **Support**
+
+For support, questions, or feature requests, please:
+- Create an issue in the repository
+- Contact the development team
+- Check the documentation in `/docs`
 
 ---
 
-**Built with ❤️ for the Swedish automotive industry**
-
-*Transforming vehicle registration numbers into comprehensive automotive intelligence.*
+**Built with ❤️ for the Swedish automotive market**
