@@ -1,3 +1,4 @@
+
 import type { CarInfoApiResponse, Vehicle, CarInfoAttribute } from '@/types/vehicle';
 
 /**

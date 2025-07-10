@@ -80,46 +80,46 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
             Fordonsanalys
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
             Jämför fordon, få detaljerade rapporter och ta välgrundade bilköpsbeslut
           </p>
         </div>
 
         {/* Input Section */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
             Sök fordon (registreringsnummer)
           </h2>
           
           <div className="space-y-4">
             {ids.map((id, index) => (
-              <div key={index} className="flex gap-3">
+              <div key={index} className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Fordon {index + 1}
                   </label>
-                                     <input
-                     type="text"
-                     value={id}
-                     onChange={(e) => {
-                       const newIds = [...ids];
-                       newIds[index] = e.target.value.toUpperCase();
-                       setIds(newIds);
-                     }}
-                     placeholder="ABC123"
-                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
-                   />
+                  <input
+                    type="text"
+                    value={id}
+                    onChange={(e) => {
+                      const newIds = [...ids];
+                      newIds[index] = e.target.value.toUpperCase();
+                      setIds(newIds);
+                    }}
+                    placeholder="ABC123"
+                    className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder:text-gray-500 text-base sm:text-sm"
+                  />
                 </div>
                 {ids.length > 1 && (
                   <button
                     onClick={() => removeComparison(index)}
-                    className="mt-6 px-3 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                    className="sm:mt-7 px-4 py-3 sm:py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium border border-red-200 sm:border-none"
                   >
                     Ta bort
                   </button>
@@ -128,25 +128,25 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-3 mt-6">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-6">
             <button
               onClick={handleLookup}
               disabled={loading || ids.every(id => !id)}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full sm:w-auto px-6 py-3 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
             >
               {loading ? 'Söker...' : 'Sök fordon'}
             </button>
             
             <button
               onClick={addComparison}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="w-full sm:w-auto px-6 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               + Lägg till jämförelse
             </button>
             
             <button
               onClick={clearAll}
-              className="px-6 py-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+              className="w-full sm:w-auto px-6 py-3 sm:py-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium"
             >
               Rensa alla
             </button>
@@ -177,15 +177,15 @@ export default function Home() {
           <DataSourceStatus dataSources={dataSourcesStatus} />
         )}
 
-        {/* Results Grid */}
+        {/* Results Grid - Responsive */}
         {results.some(r => r !== null) && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {results.map((car, index) => 
               car ? (
                 <div
                   key={index}
                   onClick={() => setSelectedVehicle(selectedVehicle === index ? null : index)}
-                  className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow cursor-pointer"
+                  className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <VehicleOverviewCard
                     car={car}
@@ -200,7 +200,7 @@ export default function Home() {
 
         {/* Detailed Analysis */}
         {selectedVehicle !== null && results[selectedVehicle] && (
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <DetailedAnalysis
               vehicle={results[selectedVehicle]!}
               index={selectedVehicle}
