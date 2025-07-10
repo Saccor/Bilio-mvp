@@ -19,14 +19,13 @@ export async function GET(req: NextRequest) {
       {
         headers: {
           Accept: "application/json",
-          "x-auth-identifier": process.env.NEXT_PUBLIC_IDENTIFIER!,
-          "x-auth-key":       process.env.NEXT_PUBLIC_KEY!,
         },
       }
     );
     return NextResponse.json(apiRes.data);
-  } catch (err: any) {
-    if (err.response?.status === 404) {
+  } catch (err: unknown) {
+    const error = err as { response?: { status?: number } };
+    if (error.response?.status === 404) {
       return NextResponse.json({ error: "Not Found" }, { status: 404 });
     }
     console.error("Car.info error:", err);
