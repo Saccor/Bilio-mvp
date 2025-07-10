@@ -2,6 +2,42 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+
+// Types for Car.info API response
+interface CarInfoAttribute {
+  id?: string | number;
+  name?: string;
+  value?: string | number | boolean;
+  values?: (string | number)[];
+  attributes?: CarInfoAttribute[];
+}
+
+interface CarInfoApiResponse {
+  success?: boolean;
+  result?: {
+    brand?: string;
+    model?: string;
+    series?: string;
+    generation?: string;
+    model_year?: number;
+    year?: number;
+    fuel_type?: string;
+    engine_type?: string;
+    engine?: string;
+    horsepower?: number;
+    car_name?: string;
+    chassis?: string;
+    trim_package?: string;
+    licence_plate?: string;
+    vin?: string;
+    vehicle_type?: string;
+    engine_name?: string;
+    first_registration_date?: string;
+    attributes?: CarInfoAttribute[];
+    images?: { url: string }[];
+  };
+}
 
 type Vehicle = {
   // Basic Information
@@ -102,80 +138,117 @@ export default function Home() {
             if (res.status === 404) throw new Error(`Fordon ${index + 1} hittades inte`);
             else throw new Error(`Serverfel för fordon ${index + 1}`);
           }
-          const apiData = await res.json() as any;
+          const apiData = await res.json() as CarInfoApiResponse;
           
           // Car.info API returns data in result object
-          const data = apiData.result || apiData;
+          const data = apiData.result || {};
           
           // Helper function to find attribute by name
-          const findAttribute = (name: string) => {
+          const findAttribute = (name: string): string | null => {
             if (!data.attributes) return null;
-            const attr = data.attributes.find((a: any) => 
+            const attr = data.attributes.find((a: CarInfoAttribute) => 
               a.name?.toLowerCase().includes(name.toLowerCase())
             );
-            return attr?.value || null;
+            const value = attr?.value;
+            return value ? String(value) : null;
+          };
+
+          // Helper function to find attribute by exact name match
+          const findExactAttribute = (name: string): string | null => {
+            if (!data.attributes) return null;
+            const attr = data.attributes.find((a: CarInfoAttribute) => 
+              a.name === name
+            );
+            const value = attr?.value;
+            return value ? String(value) : null;
+          };
+
+          // Helper function to extract NCAP ratings
+          const getNcapRating = (type: string): number | null => {
+            if (!data.attributes) return null;
+            const attr = data.attributes.find((a: CarInfoAttribute) => 
+              a.name === type
+            );
+            if (attr?.attributes) {
+              const rating = attr.attributes.find((nested: CarInfoAttribute) => nested.values);
+              return rating?.values?.[0] ? parseInt(String(rating.values[0])) : null;
+            }
+            return null;
           };
 
           // Extract comprehensive data from Car.info API
           return {
-            // Basic Information
+            // Basic Information - REAL DATA FROM API
             brand: data.brand || 'Okänt märke',
             model: data.model || 'Okänd modell',
-            variant: data.series || data.generation || undefined,
+            variant: `${data.series || ''} ${data.generation || ''}`.trim() || data.trim_package || undefined,
             year: data.model_year || data.year || undefined,
             color: findAttribute('color') || findAttribute('färg') || 'Okänd',
-            firstRegistration: data.first_registration_date || undefined,
+            firstRegistration: data.first_registration_date || (data.model_year ? `${data.model_year}-01-01` : undefined),
             dealerName: 'Car.info Demo Fordon',
             
-            // Pricing (mock data for demo)
+            // Pricing (still mock - not available in free demo API)
             price: 275000,
             marketValue: 285000,
             
-            // Engine & Performance
-            mileage: parseInt(findAttribute('mileage')) || parseInt(findAttribute('mätarställning')) || undefined,
-            fuel: findAttribute('fuel') || findAttribute('bränsle') || data.fuel_type || 'Bensin',
-            enginePower: parseInt(findAttribute('power')) || parseInt(findAttribute('hk')) || 150,
-            engineSize: parseFloat(findAttribute('engine_size')) || parseFloat(findAttribute('motorvolym')) || 2.0,
-            co2Emissions: parseInt(findAttribute('co2')) || 142,
-            fuelConsumption: parseFloat(findAttribute('consumption')) || parseFloat(findAttribute('förbrukning')) || 6.8,
-            transmission: findAttribute('transmission') || findAttribute('växellåda') || 'Manuell',
+            // Engine & Performance - REAL DATA FROM API
+            mileage: (findAttribute('mileage') && parseInt(findAttribute('mileage')!)) || 
+                     (findAttribute('mätarställning') && parseInt(findAttribute('mätarställning')!)) || undefined,
+            fuel: data.engine_type || data.fuel_type || findAttribute('fuel') || 'Okänd bränsletyp',
+            enginePower: data.horsepower || 
+                        (findAttribute('power') && parseInt(findAttribute('power')!)) || 
+                        (findAttribute('hk') && parseInt(findAttribute('hk')!)) || undefined,
+            engineSize: (data.engine && parseFloat(data.engine.split(' ')[0])) ||
+                       (findAttribute('engine_size') && parseFloat(findAttribute('engine_size')!)) || 
+                       (findAttribute('motorvolym') && parseFloat(findAttribute('motorvolym')!)) || undefined,
+            co2Emissions: (findAttribute('co2') && parseInt(findAttribute('co2')!)) || undefined,
+            fuelConsumption: (findAttribute('consumption') && parseFloat(findAttribute('consumption')!)) || 
+                            (findAttribute('förbrukning') && parseFloat(findAttribute('förbrukning')!)) || undefined,
+            transmission: findExactAttribute('transmission') || 
+                         (data.car_name?.includes('DCT') ? 'DCT Automat' : 
+                          data.car_name?.includes('AWD') ? 'AWD' : 'Okänd'),
             
             // Vehicle History
             history: {
-              imported: findAttribute('imported') === 'true' || findAttribute('imported') === true,
-              taxi: findAttribute('taxi') === 'true' || findAttribute('taxi') === true,
-              rental: findAttribute('rental') === 'true' || findAttribute('rental') === true,
+              imported: findAttribute('imported') === 'true',
+              taxi: findAttribute('taxi') === 'true', 
+              rental: findAttribute('rental') === 'true',
               stolen: false, // Demo data
             },
             
-            // Equipment
+            // Equipment - REAL DATA FROM API
             equipmentPackages: [
-              'Klimatanläggning',
-              'Elektriska fönster',
-              'Centrallås',
-              'Servostyrning'
-            ],
+              data.trim_package,
+              data.chassis,
+              data.engine_name,
+              findExactAttribute('Anti-roll Bar') && 'Stabiliseringsstag',
+              findAttribute('Heated Seats') && 'Uppvärmda säten',
+              findAttribute('Powered Seats') && 'Elmanövrerbara säten',
+              findAttribute('Ventilated Seats') && 'Ventilerade säten',
+              findAttribute('Massage') && 'Massagefunktion'
+            ].filter(Boolean) as string[],
             
-            // Technical Specifications  
+            // Technical Specifications - REAL DATA FROM API  
             dimensions: {
-              length: parseInt(findAttribute('length')) || 4520,
-              width: parseInt(findAttribute('width')) || 1770,
-              height: parseInt(findAttribute('height')) || 1460,
-              wheelbase: parseInt(findAttribute('wheelbase')) || 2640,
-              trackWidthFront: parseInt(findAttribute('track_front')) || 1535,
-              trackWidthRear: parseInt(findAttribute('track_rear')) || 1525,
-              groundClearance: parseInt(findAttribute('ground_clearance')) || 165,
-              dragCoefficient: parseFloat(findAttribute('drag_coefficient')) || 0.32,
-              maxLoad: parseInt(findAttribute('max_load')) || 520,
-              maxTrailer: parseInt(findAttribute('max_trailer')) || 1200,
-              tankVolume: parseInt(findAttribute('tank_volume')) || 55,
-              totalWeight: parseInt(findAttribute('total_weight')) || 1580,
+              length: (findAttribute('length') && parseInt(findAttribute('length')!)) || undefined,
+              width: (findAttribute('width') && parseInt(findAttribute('width')!)) || undefined,
+              height: (findAttribute('height') && parseInt(findAttribute('height')!)) || undefined,
+              wheelbase: (findAttribute('wheelbase') && parseInt(findAttribute('wheelbase')!)) || undefined,
+              trackWidthFront: (findAttribute('track_front') && parseInt(findAttribute('track_front')!)) || undefined,
+              trackWidthRear: (findAttribute('track_rear') && parseInt(findAttribute('track_rear')!)) || undefined,
+              groundClearance: (findAttribute('ground_clearance') && parseInt(findAttribute('ground_clearance')!)) || undefined,
+              dragCoefficient: (findAttribute('drag_coefficient') && parseFloat(findAttribute('drag_coefficient')!)) || undefined,
+              maxLoad: (findAttribute('max_load') && parseInt(findAttribute('max_load')!)) || undefined,
+              maxTrailer: (findAttribute('max_trailer') && parseInt(findAttribute('max_trailer')!)) || undefined,
+              tankVolume: (findAttribute('tank_volume') && parseInt(findAttribute('tank_volume')!)) || undefined,
+              totalWeight: (findAttribute('total_weight') && parseInt(findAttribute('total_weight')!)) || undefined,
             },
             
-            // Safety
+            // Safety - REAL NCAP DATA FROM API
             euroNcap: {
-              rating: parseInt(findAttribute('ncap_rating')) || 5,
-              year: data.model_year || 2019,
+              rating: getNcapRating('Overall') || 
+                     (findExactAttribute('Overall') && parseInt(findExactAttribute('Overall')!)) || undefined,
+              year: data.model_year || undefined,
             },
             lastInspection: '2024-04-12',
             
@@ -200,12 +273,26 @@ export default function Home() {
               fiveYears: 135000,
             },
             
-            // Known Issues
+            // Known Issues - DATA-DRIVEN BASED ON REAL VEHICLE INFO
             knownIssues: [
-              `Kontrollera motorolja vid ${(parseInt(findAttribute('mileage')) || 75000) + 5000} km`,
-              'Vanligt att bromsbelägg behöver bytas vid denna ålder',
-              'Kolla luftfilter - kan påverka prestanda'
-            ],
+              data.engine_type?.includes('Diesel') ? 'Kontrollera DPF-filter regelbundet för dieselmotorer' : 
+              data.engine_type?.includes('Hybrid') ? 'Batterikapacitet kan minska över tid på hybridfordon' : 
+              'Kontrollera motorolja enligt serviceschema',
+              
+              data.horsepower && data.horsepower > 130 ? 
+              'Högpresterande motor - extra viktigt med kvalitetsolja' : 
+              'Standardunderhåll enligt serviceschema',
+              
+              data.model_year && (2024 - data.model_year) > 8 ? 
+              `${2024 - data.model_year} år gammal - kontrollera bromsar och fjädring` : 
+              data.model_year && (2024 - data.model_year) > 5 ? 
+              'Kontrollera slitdelar vid denna ålder' : 
+              'Relativt ny bil - följ grundläggande underhåll',
+              
+              data.chassis === 'Cabriolet' ? 'Kontrollera takets tätningar regelbundet' :
+              data.vehicle_type === 'car' ? 'Standardkontroller för personbil' : 
+              'Följ tillverkarens underhållsschema'
+            ].filter(Boolean),
             
             // Media (if available)
             media: data.images || [],
@@ -213,8 +300,9 @@ export default function Home() {
         })
       );
       setResults(fetched);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      const error = e as Error;
+      setError(error.message);
       setResults([null, null]);
     } finally {
       setLoading(false);
@@ -371,11 +459,12 @@ function VehicleOverviewCard({ car, index, isSelected }: { car: Vehicle; index: 
     <>
       {/* Vehicle Image */}
       {car.media?.[0]?.url ? (
-        <div className="aspect-video bg-gray-100 rounded-t-xl overflow-hidden">
-          <img 
+        <div className="aspect-video bg-gray-100 rounded-t-xl overflow-hidden relative">
+          <Image 
             src={car.media[0].url} 
             alt={`${car.brand} ${car.model}`}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
         </div>
       ) : (
