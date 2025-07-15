@@ -1,7 +1,25 @@
 // src/app/page.tsx
 "use client";
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
+  const [regnr1, setRegnr1] = useState('');
+  const [regnr2, setRegnr2] = useState('');
+
+  const handleAnalyze = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (regnr1.trim()) {
+      // Navigate to results page with registration number
+      const params = new URLSearchParams({ regnr: regnr1.trim().toUpperCase() });
+      if (regnr2.trim()) {
+        params.append('compare', regnr2.trim().toUpperCase());
+      }
+      router.push(`/results?${params.toString()}`);
+    }
+  };
   return (
     <div className="bg-gray-50">
       {/* Main Content */}
@@ -71,52 +89,63 @@ export default function Home() {
             Du kan självklart analysera och jämföra bilar som säljs av både privatpersoner och bilhandlare
           </p>
 
-          <div className="space-y-6">
-            {/* First Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Bil att analysera
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+          <form onSubmit={handleAnalyze}>
+            <div className="space-y-6">
+              {/* First Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bil att analysera
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    value={regnr1}
+                    onChange={(e) => setRegnr1(e.target.value)}
+                    placeholder="ABC123"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                    required
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="ABC123"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                />
+              </div>
+
+              {/* Second Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Jämför med bil (valfritt)
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    value={regnr2}
+                    onChange={(e) => setRegnr2(e.target.value)}
+                    placeholder="XYZ789"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Second Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Jämför med bil (valfritt)
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="XYZ789"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                />
-              </div>
+            {/* Action Button */}
+            <div className="mt-8 text-center">
+              <button 
+                type="submit"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!regnr1.trim()}
+              >
+                Ange registreringsnummer för att börja
+              </button>
             </div>
-          </div>
-
-          {/* Action Button */}
-          <div className="mt-8 text-center">
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-200">
-              Ange registreringsnummer för att börja
-            </button>
-          </div>
+          </form>
 
                     {/* Footer Text */}
           <p className="text-xs text-gray-500 text-center mt-6">

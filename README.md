@@ -1,273 +1,276 @@
-# 🚗 Bilio MVP - Fordonsanalys & Jämförelse
+# 🚗 Bilio - Svenska Bilanalysplattformen
 
-**Professional Vehicle Analysis Platform for the Swedish Market**
+**Professionell bilanalys och jämförelse för den svenska marknaden**
 
-A comprehensive Next.js application that provides detailed vehicle analysis, comparison, and market insights using real-time data from the Car.info API. Perfect for car dealers, buyers, and automotive professionals who need deep vehicle intelligence.
+En komplett Next.js-applikation som erbjuder detaljerad bilanalys, kostnadskalkylering och marknadsinsikter via registreringsnummer. Perfekt för bilhandlare, köpare och bilfirman som behöver djup fordonsintelligens.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15.3.5-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-38B2AC?style=flat-square&logo=tailwind-css)
-![Car.info API](https://img.shields.io/badge/Car.info-API%20Integration-green?style=flat-square)
+![Swedish](https://img.shields.io/badge/Language-Swedish-yellow?style=flat-square)
 
-## 🎯 **What is Bilio MVP?**
+## 🎯 **Vad är Bilio?**
 
-Bilio MVP is a cutting-edge vehicle analysis platform that transforms basic vehicle registration numbers into comprehensive automotive intelligence reports. Built for the Swedish market, it provides everything from basic vehicle information to detailed technical specifications, safety ratings, market analysis, and predictive insights.
+Bilio är Sveriges ledande plattform för bilanalys och jämförelse. Med bara ett registreringsnummer får du omfattande fordonsrapporter, kostnadskalkyler och marknadsanalys. Plattformen är byggd specifikt för den svenska marknaden med professionell svensk design och användargränssnitt.
 
-## ✨ **Key Features**
+## ✨ **Huvudfunktioner**
 
-### **📊 Comprehensive Vehicle Analysis**
-- **Complete Vehicle Reports**: Transform registration numbers into detailed vehicle profiles
-- **Real-time Car.info Integration**: Access to extensive automotive database
-- **5-Tab Analysis System**: Organized insights across multiple categories
-- **Professional Swedish Interface**: Tailored for the Swedish automotive market
+### **🏠 Startsida**
+- **Modern svensk design** med lila Bilio-logotyp
+- **Intuitiv navigation**: Jämför och Om Bilio
+- **Hero-sektion**: "Jämför och analysera bilar via registreringsnumret"
+- **6 funktionskort**: Översikt över alla tjänster
+- **Prismodell**: 149 kr för analys, 199 kr för jämförelse
+- **Dubbel registreringsnummerformulär**: Snabb sökning
 
-### **🔄 Advanced Comparison Tools**
-- **Multi-Vehicle Comparison**: Compare multiple vehicles side-by-side
-- **Smart Comparison Table**: Key metrics at a glance
-- **Dynamic Vehicle Management**: Add/remove vehicles on the fly
-- **Visual Comparison**: Easy-to-understand comparison interface
+### **📊 Omfattande fordonsanalys**
+- **Komplett fordonsrapport**: Förvandla registreringsnummer till detaljerade fordonsprofiler
+- **Bilhälsometer**: Visuell hälsostatus för fordon
+- **Prisanalys**: Jämför marknadsvärde med aktuella priser
+- **Bildkarusell**: Visuell presentation av fordon
 
-### **📋 Detailed Information Categories**
+### **💰 Interaktiv kostnadskalkylator**
+- **Kostnadskalkylätorn**: Två orange sliders för årlig körsträcka (1,000-10,000 km) och tidsperiod (1-10 år)
+- **Realtidsberäkningar**: Uppdaterar totalkostnad, kostnad per km och kostnad per dag automatiskt
+- **Detaljerad kostnadsfördelning**:
+  - 🔴 Värdeminskning: 216,000 kr
+  - ⛽ Bränsle: Variabel beräkning
+  - 🛡️ Försäkring: Fast månadskostnad
+  - 🔧 Service & reparationer: 48,000 kr
 
-#### **Grundinformation (Basic Information)**
-- Märke, modell, variant
-- Första registrering, färg
-- Bilhandlare information
-- Senaste besiktning
-
-#### **Motor & Prestanda (Engine & Performance)**
-- Bränsletyp, motoreffekt
-- CO2-utsläpp, bränsleförbrukning
-- Motorvolym, växellåda
-- Teknisk motordata
-
-#### **Teknisk Data (Technical Specifications)**
-- Fordons dimensioner (längd, bredd, höjd)
-- Axelavstånd, spårvidd
-- Markfrigång, luftmotstånd
-- Vikter och kapaciteter
-
-#### **Ekonomi (Financial Analysis)**
-- Prisanalys och marknadsvärdering
-- Driftkostnader (skatt, försäkring, underhåll)
-- Marknadsposition och säljbarhet
-- Årlig värdeminskning
-
-#### **Historik (Vehicle History)**
-- Importerad, taxi, hyrbil status
+### **📋 Detaljerad prisjämförelse**
+**"Vad ingår?" sektion** med 14 funktioner:
+- Grundläggande fordonsdata
+- Tekniska specifikationer  
+- Marknadsanalys
+- Prishistorik
+- Säkerhetsbetyg
+- Miljöinformation
 - Skadehistorik
-- Euro NCAP säkerhetsbetyg
-- Säkerhetsspecifikationer
+- Serviceinformation
+- Värdeprognos
+- Återförsäljningsanalys
+- Finansieringsalternativ
+- Försäkringsrådgivning
+- 24/7 kundtjänst
+- Jämförelserapport (endast 199 kr-paketet)
 
-#### **Framtid (Future Insights)**
-- Värdeprognos (1, 3, 5 år)
-- Kända problem vid aktuell mätarställning
-- Underhållsrekommendationer
-- Age-specific maintenance advice
+## 📄 **Sidor**
 
-## 🛠 **Tech Stack**
+### **Hem (/)**
+- Hero-sektion med sökformulär
+- Funktionskort för alla tjänster
+- Prismodeller och funktionsjämförelse
+- Responsiv design för alla enheter
+
+### **Om Bilio (/om-bilio)**
+- **Mörkgradient hero** med statistik:
+  - 10,000+ jämförelser
+  - 1,000+ modeller  
+  - 5 sekunders analys
+- **"Så fungerar Bilio"**: 3-stegs process med ikoner
+- **"Varför Bilio?"**: 4 funktionskort på orange bakgrund
+- **Interaktiv FAQ**: 7 vikbara frågor med HTML details/summary
+
+### **Resultat (/results)**
+- **Tillbaka-knapp** för smidig navigation
+- **Lila uppgraderingsbanderoll** för premiumfunktioner
+- **Fordonsöversiktskort** med bildkarusell
+- **Bilhälsometer** med visuell hälsostatus
+- **Prisanalys** med marknadsvärde
+- **Interaktiv kostnadskalkylator** med realtidsuppdateringar
+- **Expanderbar kostnadsfördelning** med animationer
+
+## 🛠 **Teknisk Stack**
 
 ### **Frontend**
-- **Next.js 15.3.5** - React framework with App Router
-- **TypeScript** - Type-safe development
+- **Next.js 15.3.5** - React-ramverk med App Router
+- **TypeScript** - Typsäker utveckling
 - **Tailwind CSS v4** - Modern utility-first styling
-- **React 18** - Latest React features and hooks
+- **React 18** - Senaste React-funktioner
+
+### **Komponenter & Arkitektur**
+- **Modulär arkitektur** med återanvändbara komponenter
+- **Header.tsx** - Global navigation med smart routing
+- **Footer.tsx** - Konsekvent sidfot
+- **Responsiv design** för alla skärmstorlekar
 
 ### **Backend & API**
-- **Next.js API Routes** - Serverless API endpoints
-- **Axios** - HTTP client for API integration
-- **Car.info API** - Comprehensive vehicle database
+- **Next.js API Routes** - Serverlösa API-endpoints
+- **Vehicle Service** - Integrerad fordonstjänst
+- **TypeScript-typning** - Fullständig typsäkerhet
 
-### **Development Tools**
-- **ESLint** - Code linting and quality
-- **Turbopack** - Ultra-fast bundling
-- **TypeScript Strict Mode** - Enhanced type safety
-
-## 🏗 **Project Architecture**
-
-This project follows modern React/Next.js best practices with a clean, modular architecture:
+## 🏗 **Projektarkitektur**
 
 ```
 src/
 ├── app/
-│   ├── page.tsx              # Main application page
-│   ├── layout.tsx            # Root layout
-│   ├── globals.css           # Global styles
+│   ├── page.tsx                    # Svensk startsida
+│   ├── layout.tsx                  # Root layout med Header/Footer
+│   ├── globals.css                 # Globala stilar
+│   ├── om-bilio/
+│   │   └── page.tsx               # Om Bilio-sida
+│   ├── results/
+│   │   └── page.tsx               # Resultatsida med kalkylator
 │   └── api/
 │       └── vehicle/
-│           └── route.ts      # Vehicle API endpoint
+│           └── route.ts           # Vehicle API endpoint
 ├── components/
-│   ├── ui/                   # Reusable UI components
-│   │   ├── StatusBadge.tsx   # Color-coded status indicators
-│   │   ├── StatusCard.tsx    # Boolean status with visual indicator
-│   │   ├── InfoSection.tsx   # Styled section with title
-│   │   ├── InfoRow.tsx       # Key-value pair display
-│   │   └── ComparisonRow.tsx # Table row for vehicle comparison
-│   ├── tabs/                 # Specialized tab components
-│   │   ├── OverviewTab.tsx   # Basic vehicle information
-│   │   ├── TechnicalTab.tsx  # Technical specifications
-│   │   ├── FinancialTab.tsx  # Pricing and cost analysis
-│   │   ├── HistoryTab.tsx    # Vehicle history and safety
-│   │   └── FutureTab.tsx     # Future value predictions
-│   ├── VehicleOverviewCard.tsx # Vehicle summary card
-│   ├── DetailedAnalysis.tsx    # Tabbed analysis interface
-│   └── ComparisonTable.tsx     # Side-by-side comparison
+│   ├── Header.tsx                 # Global navigation
+│   ├── Footer.tsx                 # Global sidfot
+│   └── ui/                        # Återanvändbara UI-komponenter
+├── config/
+│   └── data-sources.ts           # Datakällkonfiguration
+├── services/
+│   └── vehicle-service.ts        # Fordonstjänst
 ├── types/
-│   └── vehicle.ts            # TypeScript interfaces
-├── utils/
-│   └── vehicle-helpers.ts    # Utility functions
-└── public/                   # Static assets
+│   └── vehicle.ts                # TypeScript-gränssnitt
+└── utils/
+    └── vehicle-transformers.ts   # Hjälpfunktioner
 ```
 
-### **Architecture Benefits**
+## 🚀 **Komma igång**
 
-- **🔧 Modularity**: Each component has a single responsibility
-- **♻️ Reusability**: UI components can be used throughout the app
-- **🧪 Testability**: Components can be tested in isolation
-- **📈 Scalability**: Easy to add new features without affecting existing code
-- **👥 Team Collaboration**: Multiple developers can work on different components
-
-## 🚀 **Getting Started**
-
-### **Prerequisites**
-- Node.js 18.0 or higher
-- npm or yarn package manager
-- Car.info API access (demo available)
+### **Förutsättningar**
+- Node.js 18.0 eller högre
+- npm eller yarn pakethanterare
 
 ### **Installation**
 
-1. **Clone the repository**
+1. **Klona repositoriet**
 ```bash
 git clone <repository-url>
 cd bilio-mvp-temp
 ```
 
-2. **Install dependencies**
+2. **Installera beroenden**
 ```bash
 npm install
 ```
 
-3. **Start Development Server**
+3. **Starta utvecklingsserver**
 ```bash
 npm run dev
 ```
 
-4. **Open Application**
-Navigate to `http://localhost:3000` in your browser (or the port shown in terminal).
+4. **Öppna applikationen**
+Navigera till `http://localhost:3000` i din webbläsare (eller porten som visas i terminalen).
 
-## 📖 **Usage Guide**
+## 📖 **Användarguide**
 
-### **Basic Vehicle Lookup**
-1. Enter one or more Swedish registration numbers (e.g., `VVV999`)
-2. Click "Sök fordon" to fetch vehicle data
-3. View summary cards for each vehicle
-4. Click on any vehicle card for detailed analysis
+### **Grundläggande fordonsökning**
+1. Ange svenska registreringsnummer (ex. `VVV999`) på startsidan
+2. Klicka "Sök fordon" för att hämta fordonsdata
+3. Visa resultat på resultatssidan med detaljerad information
 
-### **Detailed Analysis**
-- **Översikt**: Basic information and pricing
-- **Teknisk data**: Technical specifications and dimensions
-- **Ekonomi**: Financial analysis and operating costs
-- **Historik**: Vehicle history and safety ratings
-- **Framtid**: Future value and maintenance insights
+### **Interaktiv kostnadskalkylator**
+1. Använd **årlig körsträcka-slider** (1,000-10,000 km)
+2. Ställ in **tidsperiod-slider** (1-10 år)
+3. Se realtidsuppdateringar av:
+   - Total kostnad
+   - Kostnad per km
+   - Kostnad per dag
+4. Expandera "Kostnadsfördelning" för detaljerad uppdelning
 
-### **Vehicle Comparison**
-1. Add multiple vehicles using "+ Lägg till jämförelse"
-2. Enter registration numbers for each vehicle
-3. View side-by-side comparison in the comparison table
-4. Remove vehicles with "Ta bort" button if needed
+### **Navigation**
+- **Hem**: Återgå till startsidan och ny sökning
+- **Om Bilio**: Läs mer om plattformen och funktioner
+- **Jämför**: Huvudfunktion för fordonsanalys
 
-## 🔌 **API Integration**
+## 🎨 **Design & UX**
 
-### **Car.info API**
-The platform integrates with the Car.info API for comprehensive vehicle data:
+### **Färgschema**
+- **Primär**: Lila (#6366f1) för logotyp och accenter
+- **Sekundär**: Orange för sliders och premiumfunktioner
+- **Bakgrund**: Gradients och moderna färgtoner
+- **Text**: Optimal kontrast för läsbarhet
 
-- **Demo Endpoint**: `https://api.car.info/v2/app/demo/license-plate/S/{registration}`
-- **Real Data Extraction**: Extracts real vehicle specifications from API
-- **Comprehensive Attributes**: 100+ vehicle specifications
-- **Swedish Market Focus**: Optimized for Swedish registration numbers
+### **Svenskt fokus**
+- **Helt svenskt gränssnitt** med naturlig terminologi
+- **Svenska registreringsnummer** som huvudinput
+- **Lokala marknadsdata** och priser i SEK
+- **Svensk typografi** och designprinciper
 
-### **Data Processing**
-- **Smart Attribute Parsing**: Extracts relevant data from extensive API response
-- **Type-Safe Integration**: Full TypeScript support for API responses
-- **Intelligent Fallbacks**: Graceful handling of missing data
-- **Error Handling**: User-friendly error messages
+### **Responsiv design**
+- **Mobile-first** approach
+- **Tablet-optimering** för mellanstorleksenheter
+- **Desktop-enhancement** för större skärmar
+- **Touchvänliga** kontroller och interaktioner
 
-## 📊 **Data Coverage**
+## 🔌 **API-integration**
 
-### **Real Data from Car.info API**
-- ✅ Vehicle identification (brand, model, variant)
-- ✅ Engine specifications (power, type, fuel)
-- ✅ Technical attributes and year information
-- ✅ Registration and basic vehicle data
+### **Vehicle Service**
+- **Demo-endpoint** för utveckling och test
+- **Fullständig TypeScript-stöd** för API-svar
+- **Intelligent felhantering** med användarvänliga meddelanden
+- **Realtidsdata** för aktuell fordonsinformation
 
-### **Enhanced Mock Data for Demo**
-- 🎭 Market pricing and valuations
-- 🎭 Operating costs (tax, insurance, maintenance)
-- 🎭 Future value predictions
-- 🎭 Market position analysis
-- 🎭 Technical specifications and dimensions
-- 🎭 Safety ratings and vehicle history
+## 📊 **Funktionalitet**
 
-## 🧪 **Development**
+### **Kostnadskalkylering**
+- **Dynamiska beräkningar** baserade på användarinput
+- **Fyra kostnadskategorier**:
+  - Värdeminskning (fast beräkning)
+  - Bränsle (baserat på körsträcka)
+  - Försäkring (fast månadsbelopp)
+  - Service & reparationer (fast årskostnad)
 
-### **Available Scripts**
+### **Interaktiva element**
+- **Anpassade CSS-sliders** med orange styling
+- **Expanderbara sektioner** med animationer
+- **Bildkarusell** för fordonsbilder
+- **Hover-effekter** för förbättrad användarupplevelse
+
+## 🧪 **Utveckling**
+
+### **Tillgängliga skript**
 ```bash
-npm run dev         # Start development server
-npm run build       # Build for production
-npm run start       # Start production server
-npm run lint        # Run ESLint
-npm run type-check  # Check TypeScript types
+npm run dev         # Starta utvecklingsserver
+npm run build       # Bygg för produktion
+npm run start       # Starta produktionsserver
+npm run lint        # Kör ESLint
 ```
 
-### **Adding New Components**
-1. Create component in appropriate directory (`ui/`, `tabs/`, or root `components/`)
-2. Export from component file
-3. Import where needed
-4. Follow existing TypeScript patterns
+### **Kodstil**
+- **TypeScript** för alla komponenter
+- **Svenska kommentarer** för lokal utveckling
+- **Tailwind CSS** för konsekvent styling
+- **Modulär arkitektur** för skalbarhet
 
-### **Code Style**
-- Use TypeScript for all components
-- Follow existing naming conventions
-- Implement proper prop interfaces
-- Use Tailwind CSS for styling
-- Include proper error handling
+## 🔮 **Framtida förbättringar**
 
-## 🔮 **Future Enhancements**
+### **Planerade funktioner**
+- **Användarautentisering** för personliga fordonssamlingar
+- **PDF-rapportgenerering** för exporterbara fordonsrapporter
+- **Avancerad analytics** för marknadstrender
+- **Mobil-app** för iOS och Android
+- **AI-driven rekommendationer** för fordonsköp
 
-### **Planned Features**
-- **Full Car.info API Integration**: Real pricing and market data
-- **Advanced Analytics**: Market trends and insights
-- **PDF Report Generation**: Exportable vehicle reports
-- **User Authentication**: Personal vehicle collections
-- **Mobile Responsiveness**: Enhanced mobile experience
-- **API Expansion**: Integration with additional data sources
+### **Tekniska förbättringar**
+- **Enhetstestning** med Jest och React Testing Library
+- **E2E-testning** med Playwright
+- **Performance-optimering** med Next.js-optimeringar
+- **PWA-funktioner** för offline-funktionalitet
 
-### **Technical Improvements**
-- **Unit Testing**: Jest and React Testing Library
-- **Storybook**: Component documentation
-- **Error Boundaries**: Better error handling
-- **Performance Optimization**: Code splitting and lazy loading
-- **PWA Features**: Offline functionality
+## 🤝 **Bidrag**
 
-## 🤝 **Contributing**
+1. Forka repositoriet
+2. Skapa en feature-branch (`git checkout -b feature/amazing-feature`)
+3. Commita dina ändringar (`git commit -m 'Add amazing feature'`)
+4. Pusha till branchen (`git push origin feature/amazing-feature`)
+5. Öppna en Pull Request
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📄 **Licens**
 
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Detta projekt är licensierat under MIT-licensen - se [LICENSE](LICENSE)-filen för detaljer.
 
 ## 🆘 **Support**
 
-For support, questions, or feature requests, please:
-- Create an issue in the repository
-- Contact the development team
-- Check the documentation in `/docs`
+För support, frågor eller funktionsförfrågningar:
+- Skapa en issue i repositoriet
+- Kontakta utvecklingsteamet
+- Kolla dokumentationen
 
 ---
 
-**Built with ❤️ for the Swedish automotive market**
+**Byggt med ❤️ för den svenska bilmarknaden**
