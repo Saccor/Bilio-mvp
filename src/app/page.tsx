@@ -1,215 +1,330 @@
 // src/app/page.tsx
 "use client";
 
-import { useState } from "react";
-import type { Vehicle } from '@/types/vehicle';
-import { vehicleService, type VehicleServiceResult } from '@/services/vehicle-service';
-import VehicleOverviewCard from '@/components/VehicleOverviewCard';
-import DetailedAnalysis from '@/components/DetailedAnalysis';
-import ComparisonTable from '@/components/ComparisonTable';
-import DataSourceStatus from '@/components/DataSourceStatus';
-
 export default function Home() {
-  const [ids, setIds] = useState<string[]>(["VVV999", ""]);
-  const [results, setResults] = useState<(Vehicle | null)[]>([null, null]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
-  const [dataSourcesStatus, setDataSourcesStatus] = useState<VehicleServiceResult['dataSources'] | null>(null);
-
-  const handleLookup = async () => {
-    setLoading(true);
-    setError(null);
-    setDataSourcesStatus(null);
-    try {
-      const serviceResults = await Promise.all(
-        ids.map(async (val, index) => {
-          if (!val) return null;
-          
-          // Use the vehicle service instead of direct API calls
-          const result = await vehicleService.getVehicleData({
-            type: 'license-plate',
-            country: 'S',
-            id: val
-          });
-          
-          if (!result.success) {
-            throw new Error(`Fordon ${index + 1}: ${result.error}`);
-          }
-          
-          return result;
-        })
-      );
-      
-      // Extract vehicle data and capture data sources status from first successful result
-      const vehicles = serviceResults.map(result => result?.data || null);
-      const firstSuccessfulResult = serviceResults.find(result => result?.success);
-      
-      setResults(vehicles);
-      if (firstSuccessfulResult) {
-        setDataSourcesStatus(firstSuccessfulResult.dataSources);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Något gick fel');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addComparison = () => {
-    setIds([...ids, ""]);
-    setResults([...results, null]);
-  };
-
-  const removeComparison = (index: number) => {
-    if (ids.length <= 1) return;
-    const newIds = ids.filter((_, i) => i !== index);
-    const newResults = results.filter((_, i) => i !== index);
-    setIds(newIds);
-    setResults(newResults);
-    if (selectedVehicle === index) setSelectedVehicle(null);
-    else if (selectedVehicle && selectedVehicle > index) setSelectedVehicle(selectedVehicle - 1);
-  };
-
-  const clearAll = () => {
-    setIds(["", ""]);
-    setResults([null, null]);
-    setSelectedVehicle(null);
-    setError(null);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
-            Fordonsanalys
+    <div className="bg-gray-50">
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Jämför och analysera bilar<br />
+            <span className="text-orange-500">via registreringsnumret</span>
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-            Jämför fordon, få detaljerade rapporter och ta välgrundade bilköpsbeslut
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Vi granskar all tillgänglig information för att du ska kunna köpa begagnad bil med trygghet
           </p>
         </div>
 
-        {/* Input Section */}
-        <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-            Sök fordon (registreringsnummer)
-          </h2>
-          
-          <div className="space-y-4">
-            {ids.map((id, index) => (
-              <div key={index} className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Fordon {index + 1}
-                  </label>
-                  <input
-                    type="text"
-                    value={id}
-                    onChange={(e) => {
-                      const newIds = [...ids];
-                      newIds[index] = e.target.value.toUpperCase();
-                      setIds(newIds);
-                    }}
-                    placeholder="ABC123"
-                    className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder:text-gray-500 text-base sm:text-sm"
-                  />
-                </div>
-                {ids.length > 1 && (
-                  <button
-                    onClick={() => removeComparison(index)}
-                    className="sm:mt-7 px-4 py-3 sm:py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium border border-red-200 sm:border-none"
-                  >
-                    Ta bort
-                  </button>
-                )}
-              </div>
-            ))}
+        {/* Features Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+            <div className="text-orange-500 mb-2">💰</div>
+            <span className="text-sm text-gray-700">Marknadsvärde</span>
           </div>
-
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-6">
-            <button
-              onClick={handleLookup}
-              disabled={loading || ids.every(id => !id)}
-              className="w-full sm:w-auto px-6 py-3 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
-            >
-              {loading ? 'Söker...' : 'Sök fordon'}
-            </button>
-            
-            <button
-              onClick={addComparison}
-              className="w-full sm:w-auto px-6 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              + Lägg till jämförelse
-            </button>
-            
-            <button
-              onClick={clearAll}
-              className="w-full sm:w-auto px-6 py-3 sm:py-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium"
-            >
-              Rensa alla
-            </button>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+            <div className="text-gray-600 mb-2">📊</div>
+            <span className="text-sm text-gray-700">Ägandekostnad</span>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+            <div className="text-gray-600 mb-2">🔍</div>
+            <span className="text-sm text-gray-700">Fordonsanalys</span>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+            <div className="text-red-500 mb-2">⚠️</div>
+            <span className="text-sm text-gray-700">Skadehistorik</span>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+            <div className="text-blue-500 mb-2">📉</div>
+            <span className="text-sm text-gray-700">Värdeminskning</span>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+            <div className="text-gray-600 mb-2">🛡️</div>
+            <span className="text-sm text-gray-700">Säkerhetsdata</span>
           </div>
         </div>
 
-        {/* Error Display */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Fel uppstod</h3>
-                <div className="mt-2 text-sm text-red-700">
-                  <p>{error}</p>
+        {/* Pricing Section */}
+        <div className="flex justify-center space-x-8 mb-8">
+          <div className="text-center">
+            <div className="text-sm text-gray-500 mb-1">Analys</div>
+            <div className="text-2xl font-bold text-orange-500">149 kr</div>
+          </div>
+          <div className="text-center">
+            <div className="text-sm text-gray-500 mb-1">Jämförelse</div>
+            <div className="text-2xl font-bold text-gray-900">199 kr</div>
+          </div>
+        </div>
+
+        {/* Main Form Card */}
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
+            Förhandsgranskning innan du betalar
+          </h2>
+          
+          <p className="text-sm text-gray-600 text-center mb-4">
+            En förhandsgranskning visar vad analysen innehåller. Därefter väljer du själv om du vill betala för att se hela analysen eller jämförelsen.
+          </p>
+          
+          <p className="text-sm text-gray-600 text-center mb-8">
+            Du kan självklart analysera och jämföra bilar som säljs av både privatpersoner och bilhandlare
+          </p>
+
+          <div className="space-y-6">
+            {/* First Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Bil att analysera
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                 </div>
+                <input
+                  type="text"
+                  placeholder="ABC123"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                />
+              </div>
+            </div>
+
+            {/* Second Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Jämför med bil (valfritt)
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="XYZ789"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                />
               </div>
             </div>
           </div>
-        )}
 
-        {/* Data Sources Status */}
-        {dataSourcesStatus && results.some(r => r !== null) && (
-          <DataSourceStatus dataSources={dataSourcesStatus} />
-        )}
+          {/* Action Button */}
+          <div className="mt-8 text-center">
+            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-200">
+              Ange registreringsnummer för att börja
+            </button>
+          </div>
 
-        {/* Results Grid - Responsive */}
-        {results.some(r => r !== null) && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            {results.map((car, index) => 
-              car ? (
-                <div
-                  key={index}
-                  onClick={() => setSelectedVehicle(selectedVehicle === index ? null : index)}
-                  className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <VehicleOverviewCard
-                    car={car}
-                    index={index}
-                    isSelected={selectedVehicle === index}
-                  />
+                    {/* Footer Text */}
+          <p className="text-xs text-gray-500 text-center mt-6">
+            Kostnadsfri förhandsgranskning — Inspektera vår analys — Betala först du finner rapporten värdefull
+          </p>
+        </div>
+
+        {/* What's Included Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Vad ingår?
+              </h2>
+              <p className="text-lg text-gray-600 mb-8">
+                Vår analys är utformad så att vem som helst kan förstå informationen och fatta ett bra beslut.
+              </p>
+              
+              {/* Pricing */}
+              <div className="flex justify-center space-x-12 mb-12">
+                <div className="text-center">
+                  <div className="text-sm text-gray-500 mb-1">Analys</div>
+                  <div className="text-3xl font-bold text-orange-500">149 kr</div>
                 </div>
-              ) : null
-            )}
-          </div>
-        )}
+                <div className="text-center">
+                  <div className="text-sm text-gray-500 mb-1">Jämförelse</div>
+                  <div className="text-3xl font-bold text-gray-900">199 kr</div>
+                </div>
+              </div>
+            </div>
 
-        {/* Detailed Analysis */}
-        {selectedVehicle !== null && results[selectedVehicle] && (
-          <div className="mb-6 sm:mb-8">
-            <DetailedAnalysis
-              vehicle={results[selectedVehicle]!}
-              index={selectedVehicle}
-            />
-          </div>
-        )}
+            {/* Features Comparison */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="divide-y divide-gray-100">
+                
+                {/* Bilhälsomätarn */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Bilhälsomätarn</h3>
+                    <p className="text-sm text-gray-600">Betyg som kombinerar flera faktorer för att visa om bilen är ett bra köp eller inte</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
 
-        {/* Comparison Table */}
-        <ComparisonTable vehicles={results} />
+                {/* Prisanalys */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Prisanalys</h3>
+                    <p className="text-sm text-gray-600">Jämförelse med marknadspris för liknande bilar</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Skadehistorik */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Skadehistorik</h3>
+                    <p className="text-sm text-gray-600">Se rapporterade skador på bilen</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Servicebok */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Servicebok</h3>
+                    <p className="text-sm text-gray-600">Se bilens servicebok och få en uppfattning om den har blivit ordentligt omhändertagen</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Fordonsstatus */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Fordonsstatus</h3>
+                    <p className="text-sm text-gray-600">Se om bilen har varit taxi, hyrbil, stulen eller importerad</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Kända problem */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Kända problem</h3>
+                    <p className="text-sm text-gray-600">Vanliga problem som uppkommer vid bilens aktuella mätarställning</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Euro NCAP */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Euro NCAP</h3>
+                    <p className="text-sm text-gray-600">Se bilens säkerhetsbetyg inom flera olika områden</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Ägarhistorik & Garanti */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Ägarhistorik & Garanti</h3>
+                    <p className="text-sm text-gray-600">Se antal ägare och ifall bilen fortfarande har sin nybilsgaranti kvar</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Driftskostnad */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Driftskostnad</h3>
+                    <p className="text-sm text-gray-600">Se en detaljerad uppskattning om vad bilen kommer kosta att äga</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Värdeminskning */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Värdeminskning</h3>
+                    <p className="text-sm text-gray-600">Se hur mycket bilen förväntas tappa i värde år för år</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Information om säljaren */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Information om säljaren</h3>
+                    <p className="text-sm text-gray-600">Se om säljaren är en privatperson eller en bilhandlare. Betyg visas för bilhandlare</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Utrustningspaket */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Utrustningspaket</h3>
+                    <p className="text-sm text-gray-600">Komplett lista över standard och extra utrustning</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Teknisk data */}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Teknisk data</h3>
+                    <p className="text-sm text-gray-600">Motorspecifikationer, prestanda och tekniska detaljer</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-green-600">✓</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+                {/* Direktjämförelse sida vid sida */}
+                <div className="p-6 flex items-center justify-between bg-orange-50">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Direktjämförelse sida vid sida</h3>
+                    <p className="text-sm text-gray-600">Alla data för båda bilarna jämförs parallellt</p>
+                  </div>
+                  <div className="flex space-x-8 ml-8">
+                    <div className="text-gray-300">—</div>
+                    <div className="text-green-600">✓</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
