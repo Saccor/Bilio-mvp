@@ -11,7 +11,13 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="/" className="text-2xl font-bold text-purple-600">bilio</a>
+            <a href="/" className="flex items-center">
+              <img 
+                src="/Startup Car Selling Logo with Blue and White Palette.png" 
+                alt="Bilio" 
+                className="h-12 w-12 rounded-full object-cover"
+              />
+            </a>
           </div>
           
           {/* Navigation */}
