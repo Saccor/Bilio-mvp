@@ -10,6 +10,10 @@ import PriceAnalysis from '@/components/PriceAnalysis';
 import CostCalculator from '@/components/CostCalculator';
 import SellerInformation from '@/components/SellerInformation';
 import VehicleStatus from '@/components/VehicleStatus';
+import OwnerHistory from '@/components/OwnerHistory';
+import PriceDevelopment from '@/components/PriceDevelopment';
+import SafetyAnalysis from '@/components/SafetyAnalysis';
+import DamageAndService from '@/components/DamageAndService';
 
 export default function Results() {
   const searchParams = useSearchParams();
@@ -291,6 +295,78 @@ export default function Results() {
                 vehicle={vehicle}
                 registrationNumber={regnr}
               />
+            </div>
+          )
+        )}
+
+        {/* Owner History */}
+        {isComparison ? (
+          // Comparison Mode: Side by side Owner History
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {vehicle && regnr && (
+              <OwnerHistory />
+            )}
+            {compareVehicle && compareRegnr && (
+              <OwnerHistory />
+            )}
+          </div>
+        ) : (
+          // Single mode: Original Owner History
+          vehicle && regnr && (
+            <div className="mb-8">
+              <OwnerHistory />
+            </div>
+          )
+        )}
+
+        {/* Price Development */}
+        {isComparison ? (
+          // Comparison Mode: Side by side Price Development
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <PriceDevelopment />
+            <PriceDevelopment />
+          </div>
+        ) : (
+          // Single mode: Original Price Development
+          vehicle && (
+            <div className="mb-8">
+              <PriceDevelopment />
+            </div>
+          )
+        )}
+
+        {/* Safety Analysis */}
+        {isComparison ? (
+          // Comparison Mode: Side by side Safety Analysis
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {vehicle && (
+              <SafetyAnalysis vehicle={vehicle} />
+            )}
+            {compareVehicle && (
+              <SafetyAnalysis vehicle={compareVehicle} />
+            )}
+          </div>
+        ) : (
+          // Single mode: Original Safety Analysis
+          vehicle && (
+            <div className="mb-8">
+              <SafetyAnalysis vehicle={vehicle} />
+            </div>
+          )
+        )}
+
+        {/* Damage and Service */}
+        {isComparison ? (
+          // Comparison Mode: Side by side Damage and Service
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <DamageAndService />
+            <DamageAndService />
+          </div>
+        ) : (
+          // Single mode: Original Damage and Service
+          vehicle && (
+            <div className="mb-8">
+              <DamageAndService />
             </div>
           )
         )}

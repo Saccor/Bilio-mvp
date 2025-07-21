@@ -7,6 +7,7 @@ En komplett Next.js-applikation som erbjuder detaljerad bilanalys, kostnadskalky
 ![Next.js](https://img.shields.io/badge/Next.js-15.3.5-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-38B2AC?style=flat-square&logo=tailwind-css)
+![Recharts](https://img.shields.io/badge/Recharts-3.x-22d3ee?style=flat-square&logo=recharts)
 ![Swedish](https://img.shields.io/badge/Language-Swedish-yellow?style=flat-square)
 
 ## 🎯 **Vad är Bilio?**
@@ -16,18 +17,28 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse. Med bara e
 ## ✨ **Huvudfunktioner**
 
 ### **🏠 Startsida**
-- **Modern svensk design** med lila Bilio-logotyp
+- **Modern svensk design** med blå och vit logotyp
 - **Intuitiv navigation**: Jämför och Om Bilio
 - **Hero-sektion**: "Jämför och analysera bilar via registreringsnumret"
 - **6 funktionskort**: Översikt över alla tjänster
 - **Prismodell**: 149 kr för analys, 199 kr för jämförelse
 - **Dubbel registreringsnummerformulär**: Snabb sökning
 
-### **📊 Omfattande fordonsanalys**
+### **📊 Omfattande fordonsanalys med riktiga API-data**
 - **Komplett fordonsrapport**: Förvandla registreringsnummer till detaljerade fordonsprofiler
+- **Real API-integration**: Car.info API för verklig fordonsdata
+- **Minimalistisk design**: Grå ikoner utan färger för professionell look
 - **Bilhälsometer**: Visuell hälsostatus för fordon
 - **Prisanalys**: Jämför marknadsvärde med aktuella priser
 - **Bildkarusell**: Visuell presentation av fordon
+
+### **🚗 Detaljerade fordonssektioner**
+- **Fordonsstatus**: Teknisk status och kritiska flaggor med API-data
+- **Ägarhistorik & Garanti**: Komplett ägarhistorik och garantiinformation
+- **Prisutveckling**: Interaktiv linjediagram med 18 månaders pristrend
+- **Säkerhetsanalys**: Euro NCAP-betyg och säkerhetsutrustning från API
+- **Skade- & Servicehistorik**: Detaljerad timeline för underhåll och skador
+- **Säljaresinformation**: Återförsäljarbedömning och kontaktuppgifter
 
 ### **💰 Interaktiv kostnadskalkylator**
 - **Kostnadskalkylätorn**: Två orange sliders för årlig körsträcka (1,000-10,000 km) och tidsperiod (1-10 år)
@@ -40,15 +51,15 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse. Med bara e
 
 ### **📋 Detaljerad prisjämförelse**
 **"Vad ingår?" sektion** med 14 funktioner:
-- Grundläggande fordonsdata
-- Tekniska specifikationer  
-- Marknadsanalys
-- Prishistorik
-- Säkerhetsbetyg
-- Miljöinformation
-- Skadehistorik
-- Serviceinformation
-- Värdeprognos
+- Grundläggande fordonsdata (från Car.info API)
+- Tekniska specifikationer (motor, växellåda, bränsle)
+- Marknadsanalys med interaktiva diagram
+- Prishistorik med recharts-visualisering
+- Säkerhetsbetyg och utrustning
+- Miljöinformation (CO₂, bränsleförbrukning)
+- Skadehistorik med timeline
+- Serviceinformation och underhåll
+- Värdeprognos med marknadsanalys
 - Återförsäljningsanalys
 - Finansieringsalternativ
 - Försäkringsrådgivning
@@ -75,9 +86,15 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse. Med bara e
 ### **Resultat (/results)**
 - **Tillbaka-knapp** för smidig navigation
 - **Lila uppgraderingsbanderoll** för premiumfunktioner
-- **Fordonsöversiktskort** med bildkarusell
+- **Fordonsöversiktskort** med real API-data och bildkarusell
 - **Bilhälsometer** med visuell hälsostatus
 - **Prisanalys** med marknadsvärde
+- **Fordonsstatus** med teknisk analys från API
+- **Ägarhistorik & Garanti** med komplett ägarinformation
+- **Prisutveckling** med interaktiv recharts-diagram
+- **Säkerhetsanalys** med Euro NCAP och säkerhetsutrustning
+- **Skade- & Servicehistorik** med detaljerad timeline
+- **Säljaresinformation** med återförsäljarbedömning
 - **Interaktiv kostnadskalkylator** med realtidsuppdateringar
 - **Expanderbar kostnadsfördelning** med animationer
 
@@ -87,18 +104,38 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse. Med bara e
 - **Next.js 15.3.5** - React-ramverk med App Router
 - **TypeScript** - Typsäker utveckling
 - **Tailwind CSS v4** - Modern utility-first styling
-- **React 18** - Senaste React-funktioner
+- **React 19** - Senaste React-funktioner
+- **Recharts** - Interaktiva diagram och visualiseringar
 
 ### **Komponenter & Arkitektur**
 - **Modulär arkitektur** med återanvändbara komponenter
+- **Minimalistisk design** med grå ikoner och konsekvent spacing
 - **Header.tsx** - Global navigation med smart routing
 - **Footer.tsx** - Konsekvent sidfot
+- **VehicleCard.tsx** - Fordonsöversikt med real API-data
+- **VehicleStatus.tsx** - Teknisk fordonsstatus och kritiska flaggor
+- **OwnerHistory.tsx** - Ägarhistorik och garantiinformation
+- **PriceDevelopment.tsx** - Prisutveckling med recharts-diagram
+- **SafetyAnalysis.tsx** - Säkerhetsanalys med API-integration
+- **DamageAndService.tsx** - Skade- och servicehistorik
+- **HealthMeter.tsx** - Bilhälsometer med visuell status
+- **PriceAnalysis.tsx** - Prisanalys och marknadsjämförelse
+- **CostCalculator.tsx** - Interaktiv kostnadskalkylator
+- **SellerInformation.tsx** - Återförsäljareinfo
 - **Responsiv design** för alla skärmstorlekar
 
 ### **Backend & API**
 - **Next.js API Routes** - Serverlösa API-endpoints
-- **Vehicle Service** - Integrerad fordonstjänst
+- **Car.info Demo API** - Real fordonsdata via proxy
+- **Vehicle Service** - Integrerad fordonstjänst med flera datakällor
 - **TypeScript-typning** - Fullständig typsäkerhet
+- **CORS-hantering** - Via Next.js API-proxy för säker dataåtkomst
+
+### **Data & Integration**
+- **Real API-data**: Brand, model, tekniska specs, säkerhetsutrustning
+- **Mock data**: Priser, ägarhistorik, skador (tydligt markerat)
+- **Intelligent transformation**: Maximerar dataextraktion från Car.info API
+- **Framtidssäker arkitektur**: Redo för ytterligare API-integrationer
 
 ## 🏗 **Projektarkitektur**
 
@@ -111,22 +148,31 @@ src/
 │   ├── om-bilio/
 │   │   └── page.tsx               # Om Bilio-sida
 │   ├── results/
-│   │   └── page.tsx               # Resultatsida med kalkylator
+│   │   └── page.tsx               # Resultatsida med alla komponenter
 │   └── api/
 │       └── vehicle/
-│           └── route.ts           # Vehicle API endpoint
+│           └── route.ts           # Vehicle API endpoint (proxy)
 ├── components/
 │   ├── Header.tsx                 # Global navigation
 │   ├── Footer.tsx                 # Global sidfot
-│   └── ui/                        # Återanvändbara UI-komponenter
+│   ├── VehicleCard.tsx           # Fordonsöversikt med API-data
+│   ├── VehicleStatus.tsx         # Teknisk fordonsstatus
+│   ├── OwnerHistory.tsx          # Ägarhistorik & garanti
+│   ├── PriceDevelopment.tsx      # Prisutveckling med recharts
+│   ├── SafetyAnalysis.tsx        # Säkerhetsanalys med API-data
+│   ├── DamageAndService.tsx      # Skade- & servicehistorik
+│   ├── HealthMeter.tsx           # Bilhälsometer
+│   ├── PriceAnalysis.tsx         # Prisanalys
+│   ├── CostCalculator.tsx        # Kostnadskalkylator
+│   └── SellerInformation.tsx     # Återförsäljareinfo
 ├── config/
 │   └── data-sources.ts           # Datakällkonfiguration
 ├── services/
-│   └── vehicle-service.ts        # Fordonstjänst
+│   └── vehicle-service.ts        # Fordonstjänst med API-orchestration
 ├── types/
 │   └── vehicle.ts                # TypeScript-gränssnitt
 └── utils/
-    └── vehicle-transformers.ts   # Hjälpfunktioner
+    └── vehicle-transformers.ts   # API-transformering och mock-data
 ```
 
 ## 🚀 **Komma igång**
@@ -161,7 +207,15 @@ Navigera till `http://localhost:3000` i din webbläsare (eller porten som visas 
 ### **Grundläggande fordonsökning**
 1. Ange svenska registreringsnummer (ex. `VVV999`) på startsidan
 2. Klicka "Sök fordon" för att hämta fordonsdata
-3. Visa resultat på resultatssidan med detaljerad information
+3. Visa resultat på resultatssidan med detaljerad information från Car.info API
+
+### **Utforska fordonsinformation**
+- **Fordonsöversikt**: Real tekniska data och specifications
+- **Fordonsstatus**: Teknisk bedömning och kritiska flaggor
+- **Säkerhetsanalys**: Euro NCAP-betyg och säkerhetsutrustning
+- **Prisutveckling**: Interaktiv diagram med 18 månaders trend
+- **Ägarhistorik**: Komplett ägar- och garantiinformation
+- **Skadehistorik**: Timeline med service och skador
 
 ### **Interaktiv kostnadskalkylator**
 1. Använd **årlig körsträcka-slider** (1,000-10,000 km)
@@ -180,8 +234,9 @@ Navigera till `http://localhost:3000` i din webbläsare (eller porten som visas 
 ## 🎨 **Design & UX**
 
 ### **Färgschema**
-- **Primär**: Lila (#6366f1) för logotyp och accenter
-- **Sekundär**: Orange för sliders och premiumfunktioner
+- **Primär**: Orange (#f97316) för logotyp och accenter
+- **Sekundär**: Grå för neutral navigation och text
+- **Minimalistisk**: Grå ikoner (#6b7280) utan färgbakgrunder
 - **Bakgrund**: Gradients och moderna färgtoner
 - **Text**: Optimal kontrast för läsbarhet
 
@@ -196,30 +251,58 @@ Navigera till `http://localhost:3000` i din webbläsare (eller porten som visas 
 - **Tablet-optimering** för mellanstorleksenheter
 - **Desktop-enhancement** för större skärmar
 - **Touchvänliga** kontroller och interaktioner
+- **Konsekvent spacing** (`mb-8`, `mb-4`, `space-y-4`)
 
 ## 🔌 **API-integration**
 
+### **Car.info Demo API**
+- **Real fordonsdata** för svenskregistrerade fordon
+- **Tekniska specifikationer**: Motor, växellåda, bränsle, CO₂
+- **Säkerhetsutrustning**: Airbags, ABS, BLIS, assistanssystem
+- **Euro NCAP data**: Säkerhetsbetyg när tillgängligt
+- **Utrustning**: Detaljerad lista över fordonsutrustning
+
 ### **Vehicle Service**
-- **Demo-endpoint** för utveckling och test
+- **Next.js API-proxy** för CORS-hantering
 - **Fullständig TypeScript-stöd** för API-svar
 - **Intelligent felhantering** med användarvänliga meddelanden
-- **Realtidsdata** för aktuell fordonsinformation
+- **Data transformation**: Maximerar extraktion från Car.info API
+- **Mock data integration**: Tydligt markerad mock-data för saknade fält
+
+### **Framtida API-integrationer**
+- **Carfax**: Skade- och servicehistorik
+- **Bilvision**: Ägarhistorik och återkallelser
+- **Bilpriser**: Real marknadspriser och värdering
+- **Försäkringsdata**: Gruppklassificeringar och premier
 
 ## 📊 **Funktionalitet**
+
+### **Real API-data**
+- **20+ fält** från Car.info API: brand, model, motor, säkerhet
+- **Intelligent parsing**: Extraherar maximal data från attributes
+- **Enhanced mock**: Mock-data använder real data för beräkningar
+- **Clear marking**: All mock-data markerad med `/** MOCK DATA */`
 
 ### **Kostnadskalkylering**
 - **Dynamiska beräkningar** baserade på användarinput
 - **Fyra kostnadskategorier**:
   - Värdeminskning (fast beräkning)
-  - Bränsle (baserat på körsträcka)
+  - Bränsle (baserat på körsträcka och real förbrukning)
   - Försäkring (fast månadsbelopp)
   - Service & reparationer (fast årskostnad)
 
 ### **Interaktiva element**
+- **Recharts-diagram**: Professionella prisdiagram
 - **Anpassade CSS-sliders** med orange styling
 - **Expanderbara sektioner** med animationer
 - **Bildkarusell** för fordonsbilder
 - **Hover-effekter** för förbättrad användarupplevelse
+
+### **Jämförelseläge**
+- **Sida-vid-sida jämförelse** av två fordon
+- **Alla komponenter** stöder jämförelseläge
+- **Responsiv grid-layout** för optimal presentation
+- **Konsekvent spacing** och design
 
 ## 🧪 **Utveckling**
 
@@ -236,10 +319,18 @@ npm run lint        # Kör ESLint
 - **Svenska kommentarer** för lokal utveckling
 - **Tailwind CSS** för konsekvent styling
 - **Modulär arkitektur** för skalbarhet
+- **Minimalistisk design** med grå ikoner
+
+### **Data Architecture**
+- **Configuration layer**: Centraliserad API-konfiguration
+- **Service layer**: Enhetlig dataorkestrering
+- **Transformation layer**: Intelligent API-dataextraktion
+- **UI transparency**: Tydlig markering av datakällor
 
 ## 🔮 **Framtida förbättringar**
 
 ### **Planerade funktioner**
+- **Real API-integration**: Carfax, Bilvision, Bilpriser
 - **Användarautentisering** för personliga fordonssamlingar
 - **PDF-rapportgenerering** för exporterbara fordonsrapporter
 - **Avancerad analytics** för marknadstrender
@@ -251,6 +342,7 @@ npm run lint        # Kör ESLint
 - **E2E-testning** med Playwright
 - **Performance-optimering** med Next.js-optimeringar
 - **PWA-funktioner** för offline-funktionalitet
+- **Real-time updates** för marknadsdata
 
 ## 🤝 **Bidrag**
 
