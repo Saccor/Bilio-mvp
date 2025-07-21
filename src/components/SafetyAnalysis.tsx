@@ -5,7 +5,7 @@ interface SafetyAnalysisProps {
 }
 
 export default function SafetyAnalysis({ vehicle }: SafetyAnalysisProps) {
-  // Extract real safety equipment from API data
+  // ✅ REAL DATA - Säkerhetsutrustning från Car.info API
   const safetyEquipment = vehicle.equipmentPackages || [];
   
   // Check for specific safety features in equipment
@@ -33,7 +33,7 @@ export default function SafetyAnalysis({ vehicle }: SafetyAnalysisProps) {
     item.includes('Lane') || item.includes('LKA')
   );
 
-  // Mock Euro NCAP data - marked clearly
+  /** MOCK DATA - Euro NCAP betyg är simulerad data */
   const mockEuroNcap = {
     rating: 4,
     adultOccupant: 91,

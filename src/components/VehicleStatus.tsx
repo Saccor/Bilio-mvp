@@ -6,12 +6,12 @@ interface VehicleStatusProps {
 }
 
 export default function VehicleStatus({ vehicle, registrationNumber }: VehicleStatusProps) {
-  // Helper function to get overall vehicle status assessment based on available data
+  /** MOCK DATA - Statusbedömning baseras på real API-data men algoritmen är mock */
   const getVehicleStatus = () => {
     let score = 0;
     let factors = [];
 
-    // Assess based on real API data
+    // Assess based on real API data but calculations are MOCK
     if (vehicle.year && vehicle.year >= 2020) {
       score += 2;
       factors.push("modern årsmodell");

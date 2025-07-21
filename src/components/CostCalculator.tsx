@@ -20,11 +20,11 @@ export default function CostCalculator({
   const [timePeriod, setTimePeriod] = useState(3);
   const [showCostBreakdown, setShowCostBreakdown] = useState(false);
 
-  // Calculate costs based on sliders
+  /** MOCK DATA - Alla kostnadsberäkningar är simulerade */
   const calculateCosts = () => {
     const monthsTotal = timePeriod * 12;
     
-    // Detailed cost breakdown
+    // Detailed cost breakdown - MOCK DATA
     const depreciation = 216000; // Fixed depreciation
     const depreciationPerMonth = Math.round(depreciation / monthsTotal);
     

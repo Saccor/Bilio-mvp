@@ -365,4 +365,58 @@ För support, frågor eller funktionsförfrågningar:
 
 ---
 
-**Byggt med ❤️ för den svenska bilmarknaden**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. Fordonsstatus – Teknisk Poäng
+Parameter	Maxpoäng	Regler
+Årsmodell	20	0 = äldre än 10 år, 10 = 5–10 år, 20 = under 5 år
+Karosstyp / chassi	10	Standard = 5, premium (SUV/crossover/cabriolet) = 10
+Motor & drivlina	20	Miljöklass, hybrid, AWD = högre poäng
+Fullt utrustad kylsystem	10	5+ kylvätskor identifierade → full poäng
+Antal viktiga komponenter (plattform, ABS, anti-roll)	10	2+ = full poäng, 1 = 5, 0 = 0
+Total	70	För teknisk hälsopoäng
+
+1. Ägarhistorik & Garanti – Trust Score
+Parameter	Maxpoäng	Regler
+Antal ägare	20	1 = 20, 2 = 15, 3 = 10, 4+ = 5
+Senaste ägarbytet	10	Inom 1 år = 5, 1–3 år = 10
+Typ av ägare	5	Privat = 5, Företag = 3
+Aktiv garanti	15	Nybilsgaranti = 15, Förlängd = 10, Ingen = 0
+Total	50	
+
+1. Prisanalys – Värderingspoäng
+Parameter	Maxpoäng	Regler
+Prisavvikelse från marknad	20	±0–5 % = 20, ±6–10 % = 10, >10 % = 0
+Prisprognos	10	Stabilt värde = 10, snabb värdeminskning = 0
+Historik på prissänkningar	10	Flera sänkningar = lägre förtroende
+Total	40	
+
+1. Säkerhetsanalys – Skyddspoäng
+Parameter	Maxpoäng	Regler
+Euro NCAP (om finns)	20	5/5 = 20, 4/5 = 15, 3/5 = 10, saknas = 5
+Airbags (alla typer)	10	Alla zoner (fram, sida, gardin, knä) = 10, vissa = 5
+BLIS / ABS / ESP etc	10	2–3 system = 10, 1 = 5, 0 = 0
+Total	40	
+
+1. Skade- & Servicehistorik – Underhållspoäng
+Parameter	Maxpoäng	Regler
+Antal servicar	10	≥2 = 10, 1 = 5, 0 = 0
+Kända skador	10	Inga = 10, mindre = 5, stora (framkollision etc) = 0
+Regelbundenhet	5	Regelbundna = 5, ojämna = 0
+Återkallelser	5	Inga = 5, hanterade = 3, öppna = 0
+Total	30	

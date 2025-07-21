@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from 'next/navigation';
+import UserButton from './UserButton';
 
 export default function Header() {
   const pathname = usePathname();
@@ -44,14 +45,9 @@ export default function Header() {
             </a>
           </nav>
           
-          {/* Login Button */}
+          {/* User Authentication */}
           <div className="flex-shrink-0">
-            <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors">
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-              Logga in
-            </button>
+            <UserButton />
           </div>
         </div>
       </div>

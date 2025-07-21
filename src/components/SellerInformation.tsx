@@ -5,6 +5,7 @@ interface SellerInformationProps {
 }
 
 export default function SellerInformation({ isComparison = false, regnr, compareRegnr }: SellerInformationProps) {
+  /** MOCK DATA - Säljaresinformation är simulerad */
   const DealerCard = ({ registrationNumber }: { registrationNumber?: string }) => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
       <div className="flex items-start justify-between mb-4">

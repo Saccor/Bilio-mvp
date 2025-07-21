@@ -106,7 +106,7 @@ export default function Home() {
                     type="text"
                     value={regnr1}
                     onChange={(e) => setRegnr1(e.target.value)}
-                    placeholder="ABC123"
+                    placeholder="VVV999"
                     className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
                     required
                   />
@@ -128,7 +128,7 @@ export default function Home() {
                     type="text"
                     value={regnr2}
                     onChange={(e) => setRegnr2(e.target.value)}
-                    placeholder="XYZ789"
+                    placeholder="VVV999"
                     className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
                   />
                 </div>

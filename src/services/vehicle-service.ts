@@ -40,6 +40,7 @@ interface DealerData {
 export interface VehicleServiceResult {
   success: boolean;
   data?: Vehicle;
+  rawApiData?: CarInfoApiResponse; // Raw API response for advanced calculations
   error?: string;
   dataSources: {
     carInfo: boolean;
@@ -105,6 +106,7 @@ class VehicleService {
       return {
         success: true,
         data: completeVehicle,
+        rawApiData: carInfoData, // Include raw API response
         dataSources
       };
 

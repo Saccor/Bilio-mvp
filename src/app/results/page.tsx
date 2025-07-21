@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { vehicleService, type VehicleServiceResult } from '@/services/vehicle-service';
-import type { Vehicle } from '@/types/vehicle';
+import type { Vehicle, CarInfoApiResponse } from '@/types/vehicle';
 import VehicleCard from '@/components/VehicleCard';
 import HealthMeter from '@/components/HealthMeter';
 import PriceAnalysis from '@/components/PriceAnalysis';
@@ -22,7 +22,9 @@ export default function Results() {
   const isComparison = Boolean(compareRegnr);
   
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [vehicleRawData, setVehicleRawData] = useState<CarInfoApiResponse | null>(null);
   const [compareVehicle, setCompareVehicle] = useState<Vehicle | null>(null);
+  const [compareVehicleRawData, setCompareVehicleRawData] = useState<CarInfoApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,6 +48,7 @@ export default function Results() {
 
         if (result.success && result.data) {
           setVehicle(result.data);
+          setVehicleRawData(result.rawApiData || null); // Store raw API data
         } else {
           setError(result.error || 'Kunde inte hämta fordonsdata');
           setLoading(false);
@@ -62,6 +65,7 @@ export default function Results() {
 
           if (compareResult.success && compareResult.data) {
             setCompareVehicle(compareResult.data);
+            setCompareVehicleRawData(compareResult.rawApiData || null); // Store raw API data
           } else {
             // Don't fail completely if comparison vehicle fails, just show error
             console.warn(`Could not fetch comparison vehicle data: ${compareResult.error}`);
@@ -201,26 +205,28 @@ export default function Results() {
         {isComparison ? (
           // Comparison Mode: Side by side Health Meters
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <HealthMeter 
-              registrationNumber={regnr || undefined} 
-              healthScore={85} 
-              healthStatus="Bra hälsotillstånd"
-              isComparison={true} 
-            />
-            <HealthMeter 
-              registrationNumber={compareRegnr || undefined} 
-              healthScore={78} 
-              healthStatus="Acceptabelt hälsotillstånd"
-              isComparison={true} 
-            />
+            {vehicleRawData && (
+              <HealthMeter 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined} 
+                isComparison={true} 
+              />
+            )}
+            {compareVehicleRawData && (
+              <HealthMeter 
+                vehicleData={compareVehicleRawData}
+                registrationNumber={compareRegnr || undefined} 
+                isComparison={true} 
+              />
+            )}
           </div>
         ) : (
           // Single mode: Original Health Meter
-          vehicle && (
+          vehicle && vehicleRawData && (
             <div className="mb-8">
               <HealthMeter 
-                healthScore={85} 
-                healthStatus="Bra hälsotillstånd"
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
                 isComparison={false} 
               />
             </div>

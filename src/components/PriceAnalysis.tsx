@@ -7,7 +7,7 @@ interface PriceAnalysisProps {
 }
 
 export default function PriceAnalysis({ vehicle, registrationNumber, isComparison = false }: PriceAnalysisProps) {
-  // Mock data for comparison vehicle
+  /** MOCK DATA - Prisdata kommer inte från Car.info API */
   const mockPrice = registrationNumber?.includes('compare') ? 235000 : 240000;
   const mockMarketValue = registrationNumber?.includes('compare') ? 245800 : 259200;
   
