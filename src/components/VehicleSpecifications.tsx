@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { CarInfoApiResponse } from '@/types/vehicle';
+import { Key, Settings, Zap, Info, Cog } from 'lucide-react';
 
 interface VehicleSpecificationsProps {
   vehicleData: CarInfoApiResponse;
@@ -41,11 +42,7 @@ export default function VehicleSpecifications({
     {
       id: 'key-facts',
       title: 'Nyckelfakta',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-        </svg>
-      ),
+      icon: <Key className="w-5 h-5 text-gray-600" />,
       items: [
         { label: 'Bränsletyp', value: fuelType || 'Bensin', isMock: !fuelType },
         { label: 'Årsmodell', value: year.toString(), isMock: !year },
@@ -58,11 +55,7 @@ export default function VehicleSpecifications({
     {
       id: 'equipment',
       title: 'Utrustning',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
+      icon: <Settings className="w-5 h-5 text-gray-600" />,
       items: [
         { label: 'Klimatanläggning', value: 'Automatisk klimatanläggning', isMock: true },
         { label: 'Navigeringssystem', value: 'GPS med färgdisplay', isMock: true },
@@ -77,11 +70,7 @@ export default function VehicleSpecifications({
     {
       id: 'engine-performance',
       title: 'Motor & prestanda',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
+      icon: <Zap className="w-5 h-5 text-gray-600" />,
       items: [
         { label: 'Maxeffekt', value: horsepower ? `${horsepower} hk` : '180 hk', isMock: !horsepower },
         { label: 'Vridmoment', value: '350 Nm', isMock: true },
@@ -95,11 +84,7 @@ export default function VehicleSpecifications({
     {
       id: 'basic-info',
       title: 'Grundläggande information',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
+      icon: <Info className="w-5 h-5 text-gray-600" />,
       items: [
         { label: 'Märke', value: brand || 'Volvo', isMock: !brand },
         { label: 'Modell', value: model || 'V60', isMock: !model },
@@ -113,12 +98,7 @@ export default function VehicleSpecifications({
     {
       id: 'technical-specs',
       title: 'Tekniska specifikationer',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      ),
+      icon: <Cog className="w-5 h-5 text-gray-600" />,
       items: [
         { label: 'Längd', value: '4761 mm', isMock: true },
         { label: 'Bredd', value: '1850 mm', isMock: true },
@@ -167,7 +147,7 @@ export default function VehicleSpecifications({
 
             {/* Expanded Content */}
             {expandedSection === section.id && (
-              <div className="px-4 pb-4 space-y-3 border-t border-gray-200">
+              <div className="px-4 pt-4 pb-4 space-y-3 border-t border-gray-200">
                 {section.items.map((item, index) => (
                   <div key={index} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
                     <span className="text-sm text-gray-700 font-medium">{item.label}</span>

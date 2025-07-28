@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { CarInfoApiResponse } from '@/types/vehicle';
+import { AlertTriangle, FileText, Clock } from 'lucide-react';
 
 interface DamageAndServiceProps {
   vehicleData: CarInfoApiResponse;
@@ -77,33 +78,21 @@ export default function DamageAndService({
     }
   ];
 
-  const warningIcon = (
-    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.865-.833-2.631 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
-    </svg>
-  );
-
-  const documentIcon = (
-    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-    </svg>
-  );
-
   const sections = [
     {
       id: 'known-problems',
       title: 'Kända problem',
-      icon: warningIcon
+      icon: <AlertTriangle className="w-5 h-5 text-gray-600" />
     },
     {
       id: 'service-book',
       title: 'Servicebok',
-      icon: documentIcon
+      icon: <FileText className="w-5 h-5 text-gray-600" />
     },
     {
       id: 'history',
       title: 'Historik',
-      icon: documentIcon
+      icon: <Clock className="w-5 h-5 text-gray-600" />
     }
   ];
 
