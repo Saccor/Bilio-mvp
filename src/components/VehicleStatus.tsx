@@ -1,244 +1,127 @@
-import type { Vehicle } from '@/types/vehicle';
+import type { CarInfoApiResponse } from '@/types/vehicle';
 
 interface VehicleStatusProps {
-  vehicle: Vehicle;
-  registrationNumber: string;
+  vehicleData: CarInfoApiResponse;
+  registrationNumber?: string;
+  isComparison?: boolean;
 }
 
-export default function VehicleStatus({ vehicle, registrationNumber }: VehicleStatusProps) {
-  /** MOCK DATA - Statusbedömning baseras på real API-data men algoritmen är mock */
-  const getVehicleStatus = () => {
-    let score = 0;
-    let factors = [];
-
-    // Assess based on real API data but calculations are MOCK
-    if (vehicle.year && vehicle.year >= 2020) {
-      score += 2;
-      factors.push("modern årsmodell");
-    } else if (vehicle.year && vehicle.year >= 2015) {
-      score += 1;
-      factors.push("relativt ny");
+export default function VehicleStatus({ 
+  vehicleData, 
+  registrationNumber, 
+  isComparison = false 
+}: VehicleStatusProps) {
+  
+  // Vehicle status checks - MOCK DATA since not available from Car.info API
+  const statusChecks = [
+    {
+      id: 'taxi',
+      label: 'Använts som taxi',
+      status: 'Nej',
+      isClean: true,
+      isMock: true
+    },
+    {
+      id: 'rental',
+      label: 'Använts som hyrbil',
+      status: 'Nej', 
+      isClean: true,
+      isMock: true
+    },
+    {
+      id: 'imported',
+      label: 'Importerad från utlandet',
+      status: 'Nej',
+      isClean: true,
+      isMock: true
+    },
+    {
+      id: 'stolen',
+      label: 'Registrerad som stulen',
+      status: 'Nej',
+      isClean: true,
+      isMock: true
     }
-
-    if (vehicle.enginePower && vehicle.enginePower >= 100) {
-      score += 1;
-      factors.push("kraftfull motor");
-    }
-
-    if (vehicle.euroNcap?.rating && vehicle.euroNcap.rating >= 4) {
-      score += 2;
-      factors.push("hög säkerhetsrating");
-    }
-
-    // Determine status based on score
-    if (score >= 4) {
-      return { status: "Utmärkt skick", factors };
-    } else if (score >= 2) {
-      return { status: "Bra skick", factors };
-    } else if (score >= 1) {
-      return { status: "Godkänt skick", factors };
-    } else {
-      return { status: "Kräver uppmärksamhet", factors };
-    }
-  };
-
-  const vehicleAssessment = getVehicleStatus();
+  ];
 
   return (
-    <section className="p-6 bg-white rounded-xl shadow-md border">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Fullständig Fordonsstatus</h2>
-
-      {/* 1. Grundläggande fordonsinfo - FROM API */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          {vehicle.brand} {vehicle.model}
-          {vehicle.variant && <span className="text-gray-600"> {vehicle.variant}</span>}
-        </h3>
-        <div className="space-y-4">
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Registreringsnummer</p>
-              <p className="text-sm font-semibold text-gray-900">{registrationNumber}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Årsmodell</p>
-              <p className="text-sm font-semibold text-gray-900">{vehicle.year || 2014}</p>
-            </div>
-          </div>
-
-          {vehicle.color && (
-            <div className="flex items-center">
-              <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2V3z" />
-              </svg>
-              <div>
-                <p className="text-xs text-gray-500">Färg</p>
-                <p className="text-sm font-semibold text-gray-900">{vehicle.color}</p>
-              </div>
-            </div>
-          )}
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+      {/* Header */}
+      <div className="flex items-center mb-6">
+        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+          <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">
+            Fordonsstatus
+          </h2>
+          <p className="text-sm text-gray-600">
+            Fyra viktiga kontroller
+          </p>
         </div>
       </div>
 
-      {/* 2. Övergripande statusbedömning */}
-      <div className="mb-8">
-        <div className="flex items-center">
-          <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      {/* Status Checks */}
+      <div className="space-y-4">
+        {statusChecks.map((check) => (
+          <div key={check.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-3">
+              {/* Status Icon */}
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                check.isClean 
+                  ? 'border-gray-300 bg-white' 
+                  : 'border-red-500 bg-red-50'
+              }`}>
+                {check.isClean && (
+                  <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                )}
+                {!check.isClean && (
+                  <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+              
+              {/* Label */}
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-900 font-medium">{check.label}</span>
+                {check.isMock && (
+                  <span className="text-xs text-gray-400 bg-gray-200 px-2 py-1 rounded">
+                    MOCKUP
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+              check.isClean 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-red-100 text-red-700'
+            }`}>
+              {check.status}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer note */}
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="flex items-start space-x-2">
+          <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
           </svg>
           <div>
-            <p className="text-xs text-gray-500">Fordonsstatus</p>
-            <p className="text-sm font-semibold text-gray-900">
-              {vehicleAssessment.status}
-              {vehicleAssessment.factors.length > 0 && (
-                <span className="text-gray-600"> – {vehicleAssessment.factors.join(', ')}</span>
-              )}
+            <p className="text-sm font-medium text-blue-900 mb-1">Om fordonsstatus</p>
+            <p className="text-xs text-blue-700">
+              Fordonsstatus baseras på mockup-data då denna information inte är tillgänglig via Car.info API. 
+              För verklig fordonshistorik krävs integration med svenska registerdatabaser.
             </p>
-            <p className="text-xs text-gray-400">/** MOCK DATA */</p>
           </div>
         </div>
       </div>
-
-      {/* 3. Kritiska statusflaggor */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Kritiska statusflaggor</h3>
-        <div className="space-y-4">
-          
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Importstatus</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {vehicle.history?.imported ? "Importerad" : "Ej importerad"}
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Användningshistorik</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {vehicle.history?.taxi || vehicle.history?.rental ? "Taxi eller hyrbil" : "Ej taxi eller hyrbil"}
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Säkerhetsstatus</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {vehicle.history?.stolen ? "Stulen" : "Ej stulen"}
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Mätarställning</p>
-              <p className="text-sm font-semibold text-gray-900">
-                Rimlig
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.865-.833-2.631 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Återkallelser</p>
-              <p className="text-sm font-semibold text-gray-900">
-                Ingen aktiv återkallelse
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-
-      {/* 4. Statussammanfattning */}
-      <div className="p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Statussammanfattning</h3>
-        <div className="space-y-4">
-          
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Övergripande bedömning</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {vehicleAssessment.status}
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Senaste statuskontroll</p>
-              <p className="text-sm font-semibold text-gray-900">
-                Genomförd utan anmärkning
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          {vehicle.firstRegistration && (
-            <div className="flex items-center">
-              <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <div>
-                <p className="text-xs text-gray-500">Första registrering</p>
-                <p className="text-sm font-semibold text-gray-900">{vehicle.firstRegistration}</p>
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Status uppdaterad</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {new Date().toLocaleDateString('sv-SE')}
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </section>
+    </div>
   );
 } 

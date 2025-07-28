@@ -13,6 +13,7 @@ import VehicleStatus from '@/components/VehicleStatus';
 import OwnerHistory from '@/components/OwnerHistory';
 import PriceDevelopment from '@/components/PriceDevelopment';
 import SafetyAnalysis from '@/components/SafetyAnalysis';
+import VehicleSpecifications from '@/components/VehicleSpecifications';
 import DamageAndService from '@/components/DamageAndService';
 
 export default function Results() {
@@ -276,51 +277,60 @@ export default function Results() {
           />
         </div>
 
-        {/* Vehicle Status */}
-        {isComparison ? (
-          // Comparison Mode: Side by side Vehicle Status
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {vehicle && regnr && (
-              <VehicleStatus 
-                vehicle={vehicle}
-                registrationNumber={regnr}
-              />
-            )}
-            {compareVehicle && compareRegnr && (
-              <VehicleStatus 
-                vehicle={compareVehicle}
-                registrationNumber={compareRegnr}
-              />
-            )}
-          </div>
-        ) : (
-          // Single mode: Original Vehicle Status
-          vehicle && regnr && (
-            <div className="mb-8">
-              <VehicleStatus 
-                vehicle={vehicle}
-                registrationNumber={regnr}
-              />
+                  {/* Vehicle Status */}
+          {isComparison ? (
+            // Comparison Mode: Side by side Vehicle Status
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {vehicle && vehicleRawData && (
+                <VehicleStatus 
+                  vehicleData={vehicleRawData}
+                  registrationNumber={regnr || undefined}
+                />
+              )}
+              {compareVehicle && compareVehicleRawData && (
+                <VehicleStatus 
+                  vehicleData={compareVehicleRawData}
+                  registrationNumber={compareRegnr || undefined}
+                />
+              )}
             </div>
-          )
-        )}
+          ) : (
+            // Single mode: Original Vehicle Status
+            vehicle && vehicleRawData && (
+              <div className="mb-8">
+                <VehicleStatus 
+                  vehicleData={vehicleRawData}
+                  registrationNumber={regnr || undefined}
+                />
+              </div>
+            )
+          )}
 
         {/* Owner History */}
         {isComparison ? (
           // Comparison Mode: Side by side Owner History
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {vehicle && regnr && (
-              <OwnerHistory />
+            {vehicle && vehicleRawData && (
+              <OwnerHistory 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
             )}
-            {compareVehicle && compareRegnr && (
-              <OwnerHistory />
+            {compareVehicle && compareVehicleRawData && (
+              <OwnerHistory 
+                vehicleData={compareVehicleRawData}
+                registrationNumber={compareRegnr || undefined}
+              />
             )}
           </div>
         ) : (
           // Single mode: Original Owner History
-          vehicle && regnr && (
+          vehicle && vehicleRawData && (
             <div className="mb-8">
-              <OwnerHistory />
+              <OwnerHistory 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
             </div>
           )
         )}
@@ -329,14 +339,27 @@ export default function Results() {
         {isComparison ? (
           // Comparison Mode: Side by side Price Development
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <PriceDevelopment />
-            <PriceDevelopment />
+            {vehicle && vehicleRawData && (
+              <PriceDevelopment 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
+            )}
+            {compareVehicle && compareVehicleRawData && (
+              <PriceDevelopment 
+                vehicleData={compareVehicleRawData}
+                registrationNumber={compareRegnr || undefined}
+              />
+            )}
           </div>
         ) : (
           // Single mode: Original Price Development
-          vehicle && (
+          vehicle && vehicleRawData && (
             <div className="mb-8">
-              <PriceDevelopment />
+              <PriceDevelopment 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
             </div>
           )
         )}
@@ -345,18 +368,56 @@ export default function Results() {
         {isComparison ? (
           // Comparison Mode: Side by side Safety Analysis
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {vehicle && (
-              <SafetyAnalysis vehicle={vehicle} />
+            {vehicle && vehicleRawData && (
+              <SafetyAnalysis 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
             )}
-            {compareVehicle && (
-              <SafetyAnalysis vehicle={compareVehicle} />
+            {compareVehicle && compareVehicleRawData && (
+              <SafetyAnalysis 
+                vehicleData={compareVehicleRawData}
+                registrationNumber={compareRegnr || undefined}
+              />
             )}
           </div>
         ) : (
           // Single mode: Original Safety Analysis
-          vehicle && (
+          vehicle && vehicleRawData && (
             <div className="mb-8">
-              <SafetyAnalysis vehicle={vehicle} />
+              <SafetyAnalysis 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
+            </div>
+          )
+        )}
+
+        {/* Vehicle Specifications */}
+        {isComparison ? (
+          // Comparison Mode: Side by side Specifications
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {vehicle && vehicleRawData && (
+              <VehicleSpecifications 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
+            )}
+            {compareVehicle && compareVehicleRawData && (
+              <VehicleSpecifications 
+                vehicleData={compareVehicleRawData}
+                registrationNumber={compareRegnr || undefined}
+              />
+            )}
+          </div>
+        ) : (
+          // Single mode: Original Specifications
+          vehicle && vehicleRawData && (
+            <div className="mb-8">
+              <VehicleSpecifications 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
             </div>
           )
         )}
@@ -365,14 +426,27 @@ export default function Results() {
         {isComparison ? (
           // Comparison Mode: Side by side Damage and Service
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <DamageAndService />
-            <DamageAndService />
+            {vehicle && vehicleRawData && (
+              <DamageAndService 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
+            )}
+            {compareVehicle && compareVehicleRawData && (
+              <DamageAndService 
+                vehicleData={compareVehicleRawData}
+                registrationNumber={compareRegnr || undefined}
+              />
+            )}
           </div>
         ) : (
           // Single mode: Original Damage and Service
-          vehicle && (
+          vehicle && vehicleRawData && (
             <div className="mb-8">
-              <DamageAndService />
+              <DamageAndService 
+                vehicleData={vehicleRawData}
+                registrationNumber={regnr || undefined}
+              />
             </div>
           )
         )}

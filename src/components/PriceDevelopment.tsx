@@ -1,46 +1,81 @@
 'use client';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import type { CarInfoApiResponse } from '@/types/vehicle';
 
-export default function PriceDevelopment() {
-  // MOCKED price history data
-  const priceHistory = [
-    { month: 'Jan 2023', price: 189000 },
-    { month: 'Apr 2023', price: 185000 },
-    { month: 'Jul 2023', price: 179000 },
-    { month: 'Okt 2023', price: 176000 },
-    { month: 'Jan 2024', price: 172000 },
-    { month: 'Apr 2024', price: 168000 },
-    { month: 'Jul 2024', price: 164000 },
-  ]; /** MOCK DATA */
+interface PriceDevelopmentProps {
+  vehicleData: CarInfoApiResponse;
+  registrationNumber?: string;
+  isComparison?: boolean;
+}
 
-  const currentPrice = 159000; /** MOCK DATA */
-  const estimatedMarketValue = 165000; /** MOCK DATA */
-  const forecastValue = 150000; /** MOCK DATA */
+export default function PriceDevelopment({ 
+  vehicleData, 
+  registrationNumber, 
+  isComparison = false 
+}: PriceDevelopmentProps) {
+  
+  const vehicleBrand = vehicleData.result?.brand || 'UNKNOWN';
+  const vehicleModel = vehicleData.result?.model || 'MODEL';
+  
+  // MOCK DATA - Depreciation values over time
+  const depreciationData = [
+    { period: 'Idag', value: 240000, label: '240 000 kr' },
+    { period: '1 år', value: 220000, label: '220 000 kr' },
+    { period: '2 år', value: 200000, label: '200 000 kr' },
+    { period: '5 år', value: 145000, label: '145 000 kr' },
+    { period: '10 år', value: 70000, label: '70 000 kr' }
+  ];
 
   return (
-    <section className="p-6 bg-white rounded-xl shadow-md border">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Fullständig Prisutveckling</h2>
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+      {/* Header */}
+      <div className="flex items-center mb-6">
+        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+          <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">
+            Värdeminskning över tid
+          </h2>
+          <p className="text-sm text-gray-600">
+            Estimerat värdetapp för {vehicleBrand} {vehicleModel}
+          </p>
+        </div>
+      </div>
 
-      {/* Price Chart */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Prisutveckling senaste 18 månaderna</h3>
-        <div className="h-64 bg-gray-50 rounded-lg p-4">
+      {/* Depreciation Chart */}
+      <div className="mb-6">
+        <div className="h-80 bg-gray-50 rounded-lg p-4">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={priceHistory}>
+            <AreaChart 
+              data={depreciationData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <defs>
+                <linearGradient id="depreciationGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#6b7280" stopOpacity={0.3}/>
+                  <stop offset="50%" stopColor="#6b7280" stopOpacity={0.15}/>
+                  <stop offset="100%" stopColor="#6b7280" stopOpacity={0.02}/>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis 
-                dataKey="month" 
+                dataKey="period" 
                 tick={{ fontSize: 12, fill: '#6b7280' }}
                 axisLine={{ stroke: '#d1d5db' }}
+                tickLine={{ stroke: '#d1d5db' }}
               />
               <YAxis 
-                domain={['auto', 'auto']} 
+                domain={[60000, 270000]}
                 tick={{ fontSize: 12, fill: '#6b7280' }}
                 axisLine={{ stroke: '#d1d5db' }}
-                tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+                tickLine={{ stroke: '#d1d5db' }}
+                tickFormatter={(value) => `${Math.round(value / 1000)}k`}
               />
               <Tooltip 
-                formatter={(value) => [`${value.toLocaleString()} kr`, 'Pris']}
+                formatter={(value) => [`${value.toLocaleString()} kr`, 'Värde']}
                 labelStyle={{ color: '#374151' }}
                 contentStyle={{ 
                   backgroundColor: 'white', 
@@ -49,84 +84,55 @@ export default function PriceDevelopment() {
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }}
               />
-              <Line 
-                type="monotone" 
-                dataKey="price" 
-                stroke="#6b7280" 
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#374151"
                 strokeWidth={2}
-                dot={{ fill: '#6b7280', strokeWidth: 0, r: 4 }}
+                fill="url(#depreciationGradient)"
+                dot={{ fill: '#374151', strokeWidth: 0, r: 4 }}
                 activeDot={{ r: 6, fill: '#374151' }}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
-        <p className="text-xs text-gray-400 mt-2">/** MOCK DATA */</p>
       </div>
 
-      {/* Price Analysis */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Prisanalys</h3>
-        <div className="space-y-4">
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Nuvarande annonspris</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {currentPrice.toLocaleString()} kr
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
+      {/* Value Timeline */}
+      <div className="grid grid-cols-5 gap-4 mb-6">
+        {depreciationData.map((point, index) => (
+          <div key={index} className="text-center">
+            <div className="bg-gray-100 rounded-lg p-3 mb-2">
+              <div className="text-xs text-gray-600 mb-1">{point.period}</div>
+              <div className="font-bold text-gray-900 text-sm">{point.label}</div>
             </div>
           </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Beräknat marknadsvärde</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {estimatedMarketValue.toLocaleString()} kr
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <svg className="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-            <div>
-              <p className="text-xs text-gray-500">Värdeprognos inom 6 månader</p>
-              <p className="text-sm font-semibold text-gray-900">
-                {forecastValue.toLocaleString()} kr
-                <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-              </p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Analysis Summary */}
-      <div className="p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Marknadsanalys</h3>
-        <div className="flex items-start">
-          <svg className="w-5 h-5 text-gray-400 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      {/* MOCKUP indicators */}
+      <div className="flex justify-center mb-4">
+        <span className="text-xs text-gray-400 bg-gray-200 px-3 py-1 rounded">
+          MOCKUP - Estimerade värden
+        </span>
+      </div>
+
+      {/* Footer note */}
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="flex items-start space-x-2">
+          <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
           </svg>
           <div>
-            <p className="text-xs text-gray-500">Bedömning</p>
-            <p className="text-sm font-semibold text-gray-900">
-              Priset ligger under marknadsvärdet – potentiellt bra affär
-              <span className="text-xs text-gray-400 ml-2">/** MOCK DATA */</span>
-            </p>
-            <p className="text-xs text-gray-600 mt-1">
-              Baserat på jämförelse med liknande fordon och historisk prisutveckling
+            <p className="text-sm font-medium text-blue-900 mb-1">Om värdeminskning</p>
+            <p className="text-xs text-blue-700">
+              Värdeminskningen baseras på mockup-data och allmänna marknadstrender. 
+              För exakta värderingar krävs integration med professionella värderingstjänster 
+              och aktuell marknadsdata för specifika modeller.
             </p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 } 
