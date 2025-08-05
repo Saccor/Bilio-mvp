@@ -2,6 +2,7 @@
 import { createClient } from '@/lib/supabaseClient';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
+import CreditBalance from './CreditBalance';
 
 export default function UserButton() {
   const supabase = createClient();
@@ -51,16 +52,19 @@ export default function UserButton() {
   }
 
   return (
-    <div className="flex items-center space-x-3">
-      <span className="text-sm text-gray-700">
-        Hej, {user.email?.split('@')[0]}!
-      </span>
-      <button 
-        onClick={handleLogout} 
-        className="text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
-      >
-        Logga ut
-      </button>
+    <div className="flex items-center space-x-4">
+      <CreditBalance showPurchaseLink={false} className="hidden sm:flex" />
+      <div className="flex items-center space-x-3">
+        <span className="text-sm text-gray-700">
+          Hej, {user.email?.split('@')[0]}!
+        </span>
+        <button 
+          onClick={handleLogout} 
+          className="text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+        >
+          Logga ut
+        </button>
+      </div>
     </div>
   );
 } 

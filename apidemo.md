@@ -9,10 +9,11 @@
 
 
 
-gooogle client id: 1034787364228-u6jjkg9nf8p68jd5g43ue91sajl79j6f.apps.googleusercontent.com
+Google OAuth Credentials (CONFIGURED IN SUPABASE DASHBOARD):
+Client ID: 1034787364228-u6jjkg9nf8p68jd5g43ue91sajl79j6f.apps.googleusercontent.com
+Client Secret: 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
 
-
-google client secret : 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
+IMPORTANT: These must be configured in Supabase Dashboard > Authentication > Providers > Google
 
 
 

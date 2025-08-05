@@ -1,26 +1,36 @@
 'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabaseClient';
 
 export default function LoginPage() {
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}`
+        redirectTo: `${window.location.origin}/auth/callback`
       }
     });
   };
 
   useEffect(() => {
+    // Kontrollera för fel från callback
+    const errorParam = searchParams.get('error');
+    const descriptionParam = searchParams.get('description');
+    
+    if (errorParam) {
+      setError(`${errorParam}${descriptionParam ? `: ${descriptionParam}` : ''}`);
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) router.push('/');
     });
-  }, [supabase, router]);
+  }, [supabase, router, searchParams]);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -32,6 +42,12 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-gray-600">
             Använd ditt Google-konto för att komma åt alla funktioner
           </p>
+          
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              <strong>OAuth Fel:</strong> {error}
+            </div>
+          )}
         </div>
         
 
@@ -51,7 +67,10 @@ export default function LoginPage() {
           </button>
         </div>
         
-        <div className="text-center">
+        <div className="text-center space-y-2">
+          <a href="/debug-oauth" className="block text-sm text-blue-600 hover:text-blue-700">
+            🔍 Debug OAuth Information
+          </a>
           <a href="/" className="text-sm text-orange-600 hover:text-orange-700">
             ← Tillbaka till startsidan
           </a>
