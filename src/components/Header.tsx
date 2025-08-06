@@ -95,12 +95,12 @@ export default function Header() {
 
     if (isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside as any);
+      document.addEventListener('touchstart', handleClickOutside as EventListener);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside as any);
+      document.removeEventListener('touchstart', handleClickOutside as EventListener);
     };
   }, [isMobileMenuOpen]);
 
