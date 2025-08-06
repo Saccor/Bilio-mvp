@@ -20,64 +20,89 @@ export default function Home() {
       router.push(`/results?${params.toString()}`);
     }
   };
+  
   return (
     <div className="bg-gray-50">
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
             Jämför och analysera bilar<br />
-            <span className="text-orange-500">via registreringsnumret</span>
+            <span className="text-gray-700">via registreringsnumret</span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Vi granskar all tillgänglig information för att du ska kunna köpa begagnad bil med trygghet
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
-            <div className="text-orange-500 mb-2">💰</div>
-            <span className="text-sm text-gray-700">Marknadsvärde</span>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-12">
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Marknadsvärde</span>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
-            <div className="text-gray-600 mb-2">📊</div>
-            <span className="text-sm text-gray-700">Ägandekostnad</span>
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Ägandekostnad</span>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
-            <div className="text-gray-600 mb-2">🔍</div>
-            <span className="text-sm text-gray-700">Fordonsanalys</span>
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Fordonsanalys</span>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
-            <div className="text-red-500 mb-2">⚠️</div>
-            <span className="text-sm text-gray-700">Skadehistorik</span>
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Skadehistorik</span>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
-            <div className="text-blue-500 mb-2">📉</div>
-            <span className="text-sm text-gray-700">Värdeminskning</span>
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+              </svg>
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Värdeminskning</span>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
-            <div className="text-gray-600 mb-2">🛡️</div>
-            <span className="text-sm text-gray-700">Säkerhetsdata</span>
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Säkerhetsdata</span>
           </div>
         </div>
 
         {/* Pricing Section */}
-        <div className="flex justify-center space-x-8 mb-8">
+        <div className="flex justify-center space-x-8 sm:space-x-12 mb-12">
           <div className="text-center">
-            <div className="text-sm text-gray-500 mb-1">Analys</div>
-            <div className="text-2xl font-bold text-orange-500">149 kr</div>
+            <div className="text-sm text-gray-500 mb-2 font-medium">Analys</div>
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900">149 kr</div>
           </div>
           <div className="text-center">
-            <div className="text-sm text-gray-500 mb-1">Jämförelse</div>
-            <div className="text-2xl font-bold text-gray-900">199 kr</div>
+            <div className="text-sm text-gray-500 mb-2 font-medium">Jämförelse</div>
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900">199 kr</div>
           </div>
         </div>
 
         {/* Main Form Card */}
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 max-w-2xl mx-auto">
+          <h2 className="text-xl font-medium text-gray-900 mb-4 text-center">
             Förhandsgranskning innan du betalar
           </h2>
           
@@ -107,7 +132,7 @@ export default function Home() {
                     value={regnr1}
                     onChange={(e) => setRegnr1(e.target.value)}
                     placeholder="VVV999"
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                     required
                   />
                 </div>
@@ -129,7 +154,7 @@ export default function Home() {
                     value={regnr2}
                     onChange={(e) => setRegnr2(e.target.value)}
                     placeholder="VVV999"
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                   />
                 </div>
               </div>
@@ -139,7 +164,7 @@ export default function Home() {
             <div className="mt-8 text-center">
               <button 
                 type="submit"
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3.5 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!regnr1.trim()}
               >
                 Ange registreringsnummer för att börja
@@ -147,7 +172,7 @@ export default function Home() {
             </div>
           </form>
 
-                    {/* Footer Text */}
+          {/* Footer Text */}
           <p className="text-xs text-gray-500 text-center mt-6">
             Kostnadsfri förhandsgranskning — Inspektera vår analys — Betala först du finner rapporten värdefull
           </p>

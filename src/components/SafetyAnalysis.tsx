@@ -28,7 +28,7 @@ export default function SafetyAnalysis({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6" onClick={() => setIsExpanded(!isExpanded)}>
         <div className="flex items-center cursor-pointer">

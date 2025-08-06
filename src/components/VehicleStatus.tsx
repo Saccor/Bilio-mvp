@@ -46,7 +46,7 @@ export default function VehicleStatus({
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       {/* Header */}
       <div className="flex items-center mb-6">
         <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">

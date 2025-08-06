@@ -17,7 +17,7 @@ export default function VehicleCard({ vehicle, registrationNumber, isComparison 
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden ${isComparison ? 'h-fit' : 'mb-8'}`}>
+    <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden ${isComparison ? 'h-fit' : 'mb-8'}`}>
       {/* Vehicle Image */}
       <div className="relative h-64 bg-gradient-to-br from-gray-100 to-gray-200">
         {vehicle.media && vehicle.media[0] ? (
@@ -39,20 +39,20 @@ export default function VehicleCard({ vehicle, registrationNumber, isComparison 
         )}
         
         {/* Registration number overlay */}
-        <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-md shadow-sm">
-          <span className="font-mono font-bold text-gray-900">{registrationNumber}</span>
+        <div className="absolute top-4 left-4 bg-white px-3 py-2 rounded-lg shadow-sm border border-gray-200">
+          <span className="font-mono font-medium text-gray-900 text-sm">{registrationNumber}</span>
         </div>
         
         {/* Navigation arrows */}
         <div className="absolute inset-y-0 left-4 flex items-center">
-          <button className="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-sm transition-all">
+          <button className="w-9 h-9 bg-white/90 hover:bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200/50 transition-all">
             <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
         </div>
         <div className="absolute inset-y-0 right-4 flex items-center">
-          <button className="w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-sm transition-all">
+          <button className="w-9 h-9 bg-white/90 hover:bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200/50 transition-all">
             <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -61,14 +61,14 @@ export default function VehicleCard({ vehicle, registrationNumber, isComparison 
       </div>
 
       {/* Vehicle Information */}
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Main Header */}
-        <h3 className="text-xl font-bold text-gray-900 mb-6">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">
           {vehicle.brand} {vehicle.model}
         </h3>
 
         {/* Comprehensive Vehicle Information Grid */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           
           {/* Left Column */}
           <div className="space-y-4">

@@ -152,7 +152,7 @@ export default function DamageAndService({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       <h2 className="text-xl font-bold text-center text-gray-900 mb-6">
         Skador & Service
       </h2>

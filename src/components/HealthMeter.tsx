@@ -55,7 +55,7 @@ export default function HealthMeter({
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       {/* Header with grade badge and expand arrow */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">

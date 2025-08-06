@@ -7,7 +7,7 @@ interface SellerInformationProps {
 export default function SellerInformation({ isComparison = false, regnr, compareRegnr }: SellerInformationProps) {
   /** MOCK DATA - Säljaresinformation är simulerad */
   const DealerCard = ({ registrationNumber }: { registrationNumber?: string }) => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center mb-2">
@@ -80,7 +80,7 @@ export default function SellerInformation({ isComparison = false, regnr, compare
   );
 
   const PrivateCard = ({ registrationNumber }: { registrationNumber?: string }) => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center mb-2">

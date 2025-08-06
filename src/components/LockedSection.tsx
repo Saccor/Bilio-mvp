@@ -102,26 +102,26 @@ export default function LockedSection({
         </div>
         
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white/90 rounded-xl flex items-center justify-center">
-          <div className="text-center p-6 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 shadow-lg max-w-sm">
-            <div className="w-12 h-12 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white/90 rounded-2xl flex items-center justify-center">
+          <div className="text-center p-6 bg-white/95 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm max-w-sm">
+            <div className="w-12 h-12 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
             
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              🔒 {sectionName}
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {sectionName}
             </h3>
             
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 mb-5">
               Få tillgång till fullständig information med 1 kredit
             </p>
 
             <button
               onClick={handleUnlock}
               disabled={unlocking}
-              className="locked-section-trigger bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors text-sm disabled:cursor-not-allowed"
+              className="locked-section-trigger bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white px-6 py-2.5 rounded-lg font-medium transition-colors text-sm disabled:cursor-not-allowed"
             >
               {unlocking ? (
                 <div className="flex items-center">

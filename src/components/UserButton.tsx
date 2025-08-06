@@ -1,15 +1,18 @@
 'use client';
-import { createClient } from '@/lib/supabaseClient';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabaseClient';
 import CreditBalance from './CreditBalance';
 
 export default function UserButton() {
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    
     // Get initial user
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
@@ -32,7 +35,7 @@ export default function UserButton() {
     window.location.reload();
   };
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <div className="text-sm text-gray-500">Laddar...</div>
     );
@@ -44,7 +47,7 @@ export default function UserButton() {
     return (
       <a 
         href="/login" 
-        className="text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors"
+        className="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
       >
         Logga in
       </a>
@@ -55,12 +58,12 @@ export default function UserButton() {
     <div className="flex items-center space-x-4">
       <CreditBalance showPurchaseLink={false} className="hidden sm:flex" />
       <div className="flex items-center space-x-3">
-        <span className="text-sm text-gray-700">
+        <span className="text-sm text-gray-700 font-medium">
           Hej, {user.email?.split('@')[0]}!
         </span>
         <button 
           onClick={handleLogout} 
-          className="text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+          className="text-sm text-gray-600 hover:text-gray-800 font-medium transition-colors"
         >
           Logga ut
         </button>

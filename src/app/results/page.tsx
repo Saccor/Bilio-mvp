@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { vehicleService, type VehicleServiceResult } from '@/services/vehicle-service';
+import { vehicleService } from '@/services/vehicle-service';
 import type { Vehicle, CarInfoApiResponse } from '@/types/vehicle';
 import VehicleCard from '@/components/VehicleCard';
 import HealthMeter from '@/components/HealthMeter';
@@ -129,7 +129,7 @@ export default function Results() {
       reportType={isComparison ? 'comparison' : 'single'}
     >
       <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         
         {/* Back Button */}
         <div className="mb-6">
@@ -142,37 +142,41 @@ export default function Results() {
         </div>
 
         {/* Credit Status & Upgrade Banner */}
-        <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-6 mb-8 text-white">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center mb-2">
-                <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
-                <span className="font-semibold">
-                  Förhandsgranskning aktiv - 1 kredit låser upp allt!
-                </span>
+              <div className="flex items-start sm:items-center mb-3">
+                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900 text-sm sm:text-base">
+                    Förhandsgranskning aktiv
+                  </span>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1 leading-relaxed">
+                    {isComparison 
+                      ? 'Lås upp komplett jämförelse med detaljerad analys av båda bilarna för 1 kredit.'
+                      : 'Lås upp fullständig värdering, säkerhetsbedömning och marknadsanalys för 1 kredit.'
+                    }
+                  </p>
+                </div>
               </div>
-              <p className="text-sm opacity-90">
-                {isComparison 
-                  ? 'Få tillgång till komplett jämförelse med detaljerad analys av båda bilarna.'
-                  : 'Få tillgång till fullständig värdering, säkerhetsbedömning, marknadsanalys och expertköpråd.'
-                }
-              </p>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <CreditBalance showPurchaseLink={false} className="text-white [&>*]:text-white hidden sm:flex" />
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+              <CreditBalance showPurchaseLink={false} className="hidden sm:flex" />
               
-              <div className="flex space-x-2">
+              <div className="flex gap-2 sm:gap-3">
                 <a 
                   href="/credits/purchase"
-                  className="bg-white text-orange-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors text-sm whitespace-nowrap"
+                  className="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 sm:px-4 py-2.5 rounded-lg font-medium transition-colors text-xs sm:text-sm text-center whitespace-nowrap"
                 >
                   Köp krediter
                 </a>
                 <button 
-                  className="bg-orange-500 hover:bg-orange-400 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm whitespace-nowrap"
+                  className="flex-1 sm:flex-none bg-gray-900 hover:bg-gray-800 text-white px-3 sm:px-4 py-2.5 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap"
                   onClick={() => {
                     const firstLocked = document.querySelector('.locked-section-trigger');
                     if (firstLocked) {
@@ -180,7 +184,7 @@ export default function Results() {
                     }
                   }}
                 >
-                  Lås upp för en kredit
+                  Lås upp för 1 kredit
                 </button>
               </div>
             </div>
@@ -197,35 +201,35 @@ export default function Results() {
 
         {/* Vehicle Cards - Single or Comparison */}
         {isComparison ? (
-          // Comparison Mode: Side by side
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          // Comparison Mode: Side by side on desktop, stacked on mobile
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8">
             {/* Primary Vehicle */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Bil 1 - {regnr}</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Bil 1 - {regnr}</h2>
               {vehicle && <VehicleCard vehicle={vehicle} registrationNumber={regnr || ''} isComparison={true} />}
             </div>
             
             {/* Comparison Vehicle */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Bil 2 - {compareRegnr}</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Bil 2 - {compareRegnr}</h2>
               {compareVehicle ? (
                 <VehicleCard vehicle={compareVehicle} registrationNumber={compareRegnr || ''} isComparison={true} />
               ) : (
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 text-center">
                   <div className="text-gray-400 mb-4">
-                    <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 sm:w-12 h-8 sm:h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Kunde inte hämta fordonsdata</h3>
-                  <p className="text-gray-600">Registreringsnummer {compareRegnr} kunde inte hittas i databasen.</p>
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Kunde inte hämta fordonsdata</h3>
+                  <p className="text-sm sm:text-base text-gray-600">Registreringsnummer {compareRegnr} kunde inte hittas i databasen.</p>
                 </div>
               )}
             </div>
           </div>
         ) : (
           // Single Mode: Full width
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <VehicleCard vehicle={vehicle} registrationNumber={regnr || ''} isComparison={false} />
           </div>
         )}
@@ -235,7 +239,7 @@ export default function Results() {
           // Comparison Mode: Side by side Health Meters
           <LockedSection
             sectionName="Fullständig Bilhälsometer"
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8"
           >
             {vehicleRawData && (
               <HealthMeter 
@@ -257,7 +261,7 @@ export default function Results() {
           vehicle && vehicleRawData && (
             <LockedSection
               sectionName="Fullständig Bilhälsometer"
-              className="mb-8"
+              className="mb-6 sm:mb-8"
             >
               <HealthMeter 
                 vehicleData={vehicleRawData}
@@ -271,7 +275,7 @@ export default function Results() {
         {/* Price Analysis - Single mode OR comparison mode side by side */}
         {isComparison ? (
           // Comparison Mode: Side by side Price Analysis
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8">
             <PriceAnalysis 
               vehicle={vehicle || undefined} 
               registrationNumber={regnr || undefined} 
@@ -286,10 +290,12 @@ export default function Results() {
         ) : (
           // Single mode: Original Price Analysis
           vehicle && (
-            <PriceAnalysis 
-              vehicle={vehicle || undefined} 
-              isComparison={false} 
-            />
+            <div className="mb-6 sm:mb-8">
+              <PriceAnalysis 
+                vehicle={vehicle || undefined} 
+                isComparison={false} 
+              />
+            </div>
           )
         )}
 

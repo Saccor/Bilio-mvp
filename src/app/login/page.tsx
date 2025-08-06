@@ -55,7 +55,7 @@ export default function LoginPage() {
         <div className="mt-8">
           <button
             onClick={handleLogin}
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -71,7 +71,7 @@ export default function LoginPage() {
           <a href="/debug-oauth" className="block text-sm text-blue-600 hover:text-blue-700">
             🔍 Debug OAuth Information
           </a>
-          <a href="/" className="text-sm text-orange-600 hover:text-orange-700">
+          <a href="/" className="text-sm text-gray-600 hover:text-gray-800 font-medium">
             ← Tillbaka till startsidan
           </a>
         </div>

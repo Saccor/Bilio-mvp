@@ -20,7 +20,7 @@ export default function PriceAnalysis({ vehicle, registrationNumber, isCompariso
   const priceStatusColor = isGoodPrice ? 'green' : percentageDifference > 0 ? 'yellow' : 'red';
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">
         Prisanalys{registrationNumber && ` - ${registrationNumber}`}
       </h2>

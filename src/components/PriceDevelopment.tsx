@@ -27,7 +27,7 @@ export default function PriceDevelopment({
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       {/* Header */}
       <div className="flex items-center mb-6">
         <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
@@ -47,11 +47,11 @@ export default function PriceDevelopment({
 
       {/* Depreciation Chart */}
       <div className="mb-6">
-        <div className="h-80 bg-gray-50 rounded-lg p-4">
+        <div className="h-80 bg-gray-50 rounded-lg p-2 sm:p-4 flex items-center justify-center">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart 
               data={depreciationData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              margin={{ top: 20, right: 15, left: 0, bottom: 5 }}
             >
               <defs>
                 <linearGradient id="depreciationGradient" x1="0" y1="0" x2="0" y2="1">
@@ -63,16 +63,18 @@ export default function PriceDevelopment({
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis 
                 dataKey="period" 
-                tick={{ fontSize: 12, fill: '#6b7280' }}
+                tick={{ fontSize: 10, fill: '#6b7280' }}
                 axisLine={{ stroke: '#d1d5db' }}
                 tickLine={{ stroke: '#d1d5db' }}
+                height={40}
               />
               <YAxis 
                 domain={[60000, 270000]}
-                tick={{ fontSize: 12, fill: '#6b7280' }}
+                tick={{ fontSize: 10, fill: '#6b7280' }}
                 axisLine={{ stroke: '#d1d5db' }}
                 tickLine={{ stroke: '#d1d5db' }}
                 tickFormatter={(value) => `${Math.round(value / 1000)}k`}
+                width={35}
               />
               <Tooltip 
                 formatter={(value) => [`${value.toLocaleString()} kr`, 'Värde']}
