@@ -47,12 +47,12 @@ export async function GET(request: Request) {
       amount_display: transaction.amount > 0 
         ? `+${transaction.amount}` 
         : transaction.amount.toString(),
-      type_display: {
+      type_display: ({
         purchase: 'Köp',
         usage: 'Användning',
         refund: 'Återbetalning',
         bonus: 'Bonus'
-      }[transaction.type] || transaction.type,
+      } as Record<string, string>)[transaction.type] || transaction.type,
       created_at_display: new Date(transaction.created_at).toLocaleString('sv-SE')
     }));
 

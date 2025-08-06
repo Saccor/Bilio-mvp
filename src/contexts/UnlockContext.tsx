@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 interface UnlockContextType {
   isUnlocked: boolean;
@@ -27,7 +27,7 @@ interface UnlockProviderProps {
 export function UnlockProvider({ children, registrationNumber, reportType, sessionId }: UnlockProviderProps) {
   const [isUnlocked, setIsUnlocked] = useState(false);
 
-  const checkUnlockStatus = async (regNr: string, type: 'single' | 'comparison', sessId?: string) => {
+  const checkUnlockStatus = useCallback(async (regNr: string, type: 'single' | 'comparison', sessId?: string) => {
     try {
       const params = new URLSearchParams({ type });
       if (sessId || sessionId) {
@@ -40,7 +40,7 @@ export function UnlockProvider({ children, registrationNumber, reportType, sessi
       console.error('Error checking unlock status:', error);
       setIsUnlocked(false);
     }
-  };
+  }, [sessionId]);
 
   const unlockReport = async (regNr: string, type: 'single' | 'comparison', sessId?: string, comparisonRegNr?: string): Promise<boolean> => {
     try {
@@ -78,7 +78,7 @@ export function UnlockProvider({ children, registrationNumber, reportType, sessi
 
   useEffect(() => {
     checkUnlockStatus(registrationNumber, reportType, sessionId || undefined);
-  }, [registrationNumber, reportType, sessionId]);
+  }, [registrationNumber, reportType, sessionId, checkUnlockStatus]);
 
   const value = {
     isUnlocked,

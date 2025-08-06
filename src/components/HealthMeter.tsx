@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import type { CarInfoApiResponse } from '@/types/vehicle';
+import type { CarInfoApiResponse, Vehicle } from '@/types/vehicle';
 import { calculateHealthScore } from '@/utils/health-calculator';
 
 interface HealthMeterProps {
   vehicleData: CarInfoApiResponse;
+  transformedVehicle?: Vehicle | null;
   registrationNumber?: string;
   isComparison?: boolean;
 }
 
 export default function HealthMeter({ 
-  vehicleData
+  vehicleData,
+  transformedVehicle
 }: HealthMeterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   // Calculate health score using CEO's exact specification
-  const healthResult = calculateHealthScore(vehicleData);
+  const healthResult = calculateHealthScore(vehicleData, transformedVehicle || undefined);
   
   const vehicleBrand = vehicleData.result?.brand || 'UNKNOWN';
   const vehicleModel = vehicleData.result?.model || 'MODEL';

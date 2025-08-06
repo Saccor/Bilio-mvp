@@ -1,5 +1,6 @@
 import type { Vehicle } from '@/types/vehicle';
 import { Car, Calendar, Gauge, Zap, Users, Fuel, Building, Settings, Palette, FileText, Shield, Cloud } from 'lucide-react';
+import Image from 'next/image';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -15,10 +16,11 @@ export default function VehicleCard({ vehicle, registrationNumber, isComparison 
       {/* Vehicle Image */}
       <div className="relative h-64 bg-gradient-to-br from-gray-100 to-gray-200">
         {vehicle.media && vehicle.media[0] ? (
-          <img 
+          <Image 
             src={vehicle.media[0].url} 
             alt={`${vehicle.brand} ${vehicle.model}`}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
         ) : (
           // Default vehicle image placeholder

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { vehicleService } from '@/services/vehicle-service';
@@ -20,7 +20,7 @@ import LockedSection from '@/components/LockedSection';
 import CreditBalance from '@/components/CreditBalance';
 import { UnlockProvider } from '@/contexts/UnlockContext';
 
-export default function Results() {
+function ResultsContent() {
   const searchParams = useSearchParams();
   const regnr = searchParams.get('regnr');
   const compareRegnr = searchParams.get('compare');
@@ -276,11 +276,13 @@ export default function Results() {
             {vehicleRawData && (
               <HealthMeter 
                 vehicleData={vehicleRawData}
+                transformedVehicle={vehicle}
               />
             )}
             {compareVehicleRawData && (
               <HealthMeter 
                 vehicleData={compareVehicleRawData}
+                transformedVehicle={compareVehicle}
               />
             )}
           </LockedSection>
@@ -293,6 +295,7 @@ export default function Results() {
             >
               <HealthMeter 
                 vehicleData={vehicleRawData}
+                transformedVehicle={vehicle}
               />
             </LockedSection>
           )
@@ -511,5 +514,20 @@ export default function Results() {
         </div>
       </div>
     </UnlockProvider>
+  );
+}
+
+export default function Results() {
+  return (
+    <Suspense fallback={
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Laddar analys...</p>
+        </div>
+      </div>
+    }>
+      <ResultsContent />
+    </Suspense>
   );
 } 

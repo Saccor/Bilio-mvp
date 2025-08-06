@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabaseClient';
 import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -36,13 +36,7 @@ export default function Dashboard() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (mounted) {
-      fetchUserData();
-    }
-  }, [mounted]);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       // Get user
       const { data: { user } } = await supabase.auth.getUser();
@@ -104,7 +98,13 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    if (mounted) {
+      fetchUserData();
+    }
+  }, [mounted, fetchUserData]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('sv-SE');

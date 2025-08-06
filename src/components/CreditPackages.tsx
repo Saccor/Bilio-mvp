@@ -35,8 +35,9 @@ export default function CreditPackages({ onSelectPackage, selectedPackageId }: C
       }
 
       setPackages(data.packages);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setError(errorMessage);
       console.error('Error fetching packages:', err);
     } finally {
       setLoading(false);

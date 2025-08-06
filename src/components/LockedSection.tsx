@@ -51,7 +51,7 @@ export default function LockedSection({
       const compareRegnr = urlParams.get('compare');
       const reportType = compareRegnr ? 'comparison' : 'single';
 
-      const success = await unlockReport(regnr, reportType, undefined, compareRegnr);
+      const success = await unlockReport(regnr, reportType, undefined, compareRegnr || undefined);
 
       if (success) {
         // Success - everything is now unlocked!

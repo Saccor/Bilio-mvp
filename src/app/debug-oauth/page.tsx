@@ -45,8 +45,8 @@ export default function DebugOAuth() {
       if (error) {
         setDebugInfo(prev => ({ ...prev, supabaseError: error.message }));
       }
-    } catch (err: any) {
-      setDebugInfo(prev => ({ ...prev, catchError: err.message }));
+    } catch (err: unknown) {
+      setDebugInfo(prev => ({ ...prev, catchError: err instanceof Error ? err.message : String(err) }));
     }
   };
 

@@ -55,8 +55,9 @@ export default function CreditBalance({ showPurchaseLink = true, className = '' 
       }
 
       setCredits(data.credits);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setError(errorMessage);
       console.error('Error fetching credit balance:', err);
     } finally {
       setLoading(false);

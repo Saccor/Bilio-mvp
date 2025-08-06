@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface SellerInformationProps {
   isComparison?: boolean;
   regnr?: string;
@@ -36,7 +38,7 @@ export default function SellerInformation({ isComparison = false }: SellerInform
       <div className="flex-1">
         {/* Trustpilot Rating */}
         <div className="flex items-center mb-4">
-          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTUuMDkgOC4yNkwyMiA5TDE3IDEzTDE4LjE4IDIyTDEyIDE4LjM5TDUuODIgMjJMNyAxM0wyIDlMOC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMDBCNjdBIi8+Cjwvc3ZnPgo=" alt="Trustpilot" className="w-6 h-6 mr-2" />
+          <Image src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTUuMDkgOC4yNkwyMiA5TDE3IDEzTDE4LjE4IDIyTDEyIDE4LjM5TDUuODIgMjJMNyAxM0wyIDlMOC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMDBCNjdBIi8+Cjwvc3ZnPgo=" alt="Trustpilot" width={24} height={24} className="w-6 h-6 mr-2" />
           <span className="text-sm font-semibold text-gray-900">4.8</span>
           <span className="text-sm text-gray-600 ml-1">(112 recensioner)</span>
         </div>

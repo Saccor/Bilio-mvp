@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -9,9 +10,11 @@ export default function Footer() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <img 
+              <Image 
                 src="/Startup Car Selling Logo with Blue and White Palette.png" 
                 alt="Bilio" 
+                width={32}
+                height={32}
                 className="h-8 w-8 rounded-lg object-cover"
               />
               <span className="ml-2 text-lg font-bold text-gray-900">Bilio</span>
@@ -63,9 +66,11 @@ export default function Footer() {
           {/* Logo */}
           <div className="text-center">
             <Link href="/" className="flex items-center justify-center">
-              <img 
+              <Image 
                 src="/Startup Car Selling Logo with Blue and White Palette.png" 
                 alt="Bilio" 
+                width={32}
+                height={32}
                 className="h-8 w-8 rounded-lg object-cover"
               />
               <span className="ml-2 text-lg font-bold text-gray-900">Bilio</span>
