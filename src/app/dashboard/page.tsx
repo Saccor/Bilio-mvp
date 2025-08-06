@@ -157,7 +157,7 @@ export default function Dashboard() {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
             <div className="text-center">
               <div className="text-3xl font-bold">{credits}</div>
               <div className="text-slate-300 text-sm">Krediter kvar</div>
@@ -194,7 +194,7 @@ export default function Dashboard() {
         {/* Quick Actions */}
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Snabbåtgärder</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Link 
               href="/"
               className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow group"

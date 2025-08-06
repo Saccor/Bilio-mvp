@@ -40,7 +40,7 @@ export default function Home() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-12 px-2 sm:px-0">
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 text-center hover:shadow-md transition-shadow">
             <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
               <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,168 +211,168 @@ export default function Home() {
               <div className="divide-y divide-gray-100">
                 
                 {/* Bilhälsomätarn */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Bilhälsomätarn</h3>
                     <p className="text-sm text-gray-600">Betyg som kombinerar flera faktorer för att visa om bilen är ett bra köp eller inte</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Prisanalys */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Prisanalys</h3>
                     <p className="text-sm text-gray-600">Jämförelse med marknadspris för liknande bilar</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Skadehistorik */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Skadehistorik</h3>
                     <p className="text-sm text-gray-600">Se rapporterade skador på bilen</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Servicebok */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Servicebok</h3>
                     <p className="text-sm text-gray-600">Se bilens servicebok och få en uppfattning om den har blivit ordentligt omhändertagen</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Fordonsstatus */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Fordonsstatus</h3>
                     <p className="text-sm text-gray-600">Se om bilen har varit taxi, hyrbil, stulen eller importerad</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Kända problem */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Kända problem</h3>
                     <p className="text-sm text-gray-600">Vanliga problem som uppkommer vid bilens aktuella mätarställning</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Euro NCAP */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Euro NCAP</h3>
                     <p className="text-sm text-gray-600">Se bilens säkerhetsbetyg inom flera olika områden</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Ägarhistorik & Garanti */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Ägarhistorik & Garanti</h3>
                     <p className="text-sm text-gray-600">Se antal ägare och ifall bilen fortfarande har sin nybilsgaranti kvar</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Driftskostnad */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Driftskostnad</h3>
                     <p className="text-sm text-gray-600">Se en detaljerad uppskattning om vad bilen kommer kosta att äga</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Värdeminskning */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Värdeminskning</h3>
                     <p className="text-sm text-gray-600">Se hur mycket bilen förväntas tappa i värde år för år</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Information om säljaren */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Information om säljaren</h3>
                     <p className="text-sm text-gray-600">Se om säljaren är en privatperson eller en bilhandlare. Betyg visas för bilhandlare</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Utrustningspaket */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Utrustningspaket</h3>
                     <p className="text-sm text-gray-600">Komplett lista över standard och extra utrustning</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Teknisk data */}
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Teknisk data</h3>
                     <p className="text-sm text-gray-600">Motorspecifikationer, prestanda och tekniska detaljer</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-green-600">✓</div>
                     <div className="text-green-600">✓</div>
                   </div>
                 </div>
 
                 {/* Direktjämförelse sida vid sida */}
-                <div className="p-6 flex items-center justify-between bg-orange-50">
-                  <div className="flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-between bg-orange-50">
+                  <div className="flex-1 min-w-0 pr-4">
                     <h3 className="font-semibold text-gray-900 mb-1">Direktjämförelse sida vid sida</h3>
                     <p className="text-sm text-gray-600">Alla data för båda bilarna jämförs parallellt</p>
                   </div>
-                  <div className="flex space-x-8 ml-8">
+                  <div className="flex space-x-4 sm:space-x-8 flex-shrink-0">
                     <div className="text-gray-300">—</div>
                     <div className="text-green-600">✓</div>
                   </div>

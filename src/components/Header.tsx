@@ -5,6 +5,73 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import UserButton from './UserButton';
+import { createClient } from '@/lib/supabaseClient';
+import { User } from '@supabase/supabase-js';
+
+// Mobile User Menu Component (Flat Layout)
+function MobileUserMenu({ onClose }: { onClose?: () => void }) {
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get initial user
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
+
+  const handleLogout = async () => {
+    onClose?.();
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
+
+  if (loading) {
+    return <div className="text-sm text-gray-500 px-4 py-2">Laddar...</div>;
+  }
+
+  if (!user) {
+    return (
+      <Link 
+        href="/login" 
+        className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+        onClick={onClose}
+      >
+        Logga in
+      </Link>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <Link
+        href="/dashboard"
+        className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+        onClick={onClose}
+      >
+        Mina sidor
+      </Link>
+      <button
+        onClick={handleLogout}
+        className="block w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+      >
+        Logga ut
+      </button>
+    </div>
+  );
+}
 
 export default function Header() {
   const pathname = usePathname();
@@ -15,8 +82,30 @@ export default function Header() {
     setMounted(true);
   }, []);
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen) {
+        const target = event.target as Element;
+        if (!target.closest('header')) {
+          setIsMobileMenuOpen(false);
+        }
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside as any);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside as any);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="bg-white border-b border-gray-200 relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -83,34 +172,45 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-2 border-t border-gray-200 mt-2">
-            <Link 
-              href="/" 
-              className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                mounted && pathname === '/' 
-                  ? 'text-gray-900 bg-gray-100' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
+          <>
+            {/* Overlay */}
+            <div 
+              className="md:hidden fixed inset-0 bg-black bg-opacity-25 z-30" 
               onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Jämför
-            </Link>
-            <Link 
-              href="/om-bilio" 
-              className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                mounted && pathname === '/om-bilio' 
-                  ? 'text-gray-900 bg-gray-100' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              prefetch={false}
-            >
-              Om Bilio
-            </Link>
-            <div className="sm:hidden pt-2 border-t border-gray-200">
-              <UserButton />
+            />
+            {/* Menu */}
+            <div className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-2">
+              <Link 
+                href="/" 
+                className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  mounted && pathname === '/' 
+                    ? 'text-gray-900 bg-gray-100' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Jämför
+              </Link>
+              <Link 
+                href="/om-bilio" 
+                className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  mounted && pathname === '/om-bilio' 
+                    ? 'text-gray-900 bg-gray-100' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                prefetch={false}
+              >
+                Om Bilio
+              </Link>
+              {/* Mobile User Menu - Flat Layout */}
+              <div className="sm:hidden pt-2 border-t border-gray-200">
+                <MobileUserMenu onClose={() => setIsMobileMenuOpen(false)} />
+              </div>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </header>
