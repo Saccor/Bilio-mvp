@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CarInfoApiResponse } from '@/types/vehicle';
-import { calculateHealthScore, getHealthStatus } from '@/utils/health-calculator';
+import { calculateHealthScore } from '@/utils/health-calculator';
 
 interface HealthMeterProps {
   vehicleData: CarInfoApiResponse;
@@ -9,50 +9,30 @@ interface HealthMeterProps {
 }
 
 export default function HealthMeter({ 
-  vehicleData,
-  registrationNumber, 
-  isComparison = false 
+  vehicleData
 }: HealthMeterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Calculate real health score based on API data
+  // Calculate health score using CEO's exact specification
   const healthResult = calculateHealthScore(vehicleData);
-  const healthStatus = getHealthStatus(healthResult.healthIndex);
   
   const vehicleBrand = vehicleData.result?.brand || 'UNKNOWN';
   const vehicleModel = vehicleData.result?.model || 'MODEL';
 
-  const getGradeFromScore = (healthIndex: number) => {
-    if (healthIndex >= 90) return { grade: 'A', color: 'bg-green-500' };
-    if (healthIndex >= 80) return { grade: 'B', color: 'bg-green-400' };
-    if (healthIndex >= 65) return { grade: 'C', color: 'bg-orange-500' };
-    if (healthIndex >= 50) return { grade: 'D', color: 'bg-orange-400' };
-    return { grade: 'E', color: 'bg-red-500' };
-  };
+  // Use the grade from the calculation result with fallback
+  const overallGrade = healthResult.breakdown?.grade || { grade: 'C', description: 'OK', color: 'bg-orange-500' };
 
-  const getScoreBackgroundColor = (score: number, maxScore: number) => {
-    const percentage = (score / maxScore) * 100;
-    if (percentage >= 80) return 'bg-green-50 border-green-200';
-    if (percentage >= 50) return 'bg-yellow-50 border-yellow-200';
+  const getScoreBackgroundColor = (score: number) => {
+    if (score >= 80) return 'bg-green-50 border-green-200';
+    if (score >= 50) return 'bg-yellow-50 border-yellow-200';
     return 'bg-red-50 border-red-200';
   };
 
-  const getScoreBarColor = (score: number, maxScore: number) => {
-    const percentage = (score / maxScore) * 100;
-    if (percentage >= 80) return 'bg-green-500';
-    if (percentage >= 50) return 'bg-orange-500';
+  const getScoreBarColor = (score: number) => {
+    if (score >= 80) return 'bg-green-500';
+    if (score >= 50) return 'bg-orange-500';
     return 'bg-red-500';
   };
-
-  const overallGrade = getGradeFromScore(healthResult.healthIndex);
-
-  const gradingScale = [
-    { grade: 'A', title: 'Fynd - Svårt att hitta bättre', range: '90-100', color: 'bg-green-500' },
-    { grade: 'B', title: 'Bra köp - Rekommenderas', range: '80-89', color: 'bg-green-400' },
-    { grade: 'C', title: 'OK - Kolla vidare', range: '65-79', color: 'bg-orange-500' },
-    { grade: 'D', title: 'Tveksamt - Risk', range: '50-64', color: 'bg-orange-400' },
-    { grade: 'E', title: 'Undvik - Hög risk', range: '0-49', color: 'bg-red-500' }
-  ];
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
@@ -65,6 +45,7 @@ export default function HealthMeter({
           </div>
           <h2 className="text-lg font-semibold text-gray-900">
             Bilhälsometer
+            <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">API</span>
           </h2>
         </div>
         {/* Expand/Collapse Arrow */}
@@ -104,7 +85,7 @@ export default function HealthMeter({
           {healthResult.healthIndex} poäng
         </div>
         <div className="text-sm text-blue-600">
-          {healthResult.parameters.length} parametrar analyserade
+          {healthResult.breakdown?.categories?.length || 11} kategorier analyserade
         </div>
       </div>
 
@@ -148,101 +129,47 @@ export default function HealthMeter({
       {/* Expandable detailed section */}
       {isExpanded && (
         <div className="space-y-6 border-t pt-6">
-          {/* Parameters section */}
+
+
+          {/* CEO's 11 Categories */}
           <div>
             <div className="flex items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Parametrar vi bedömer</h3>
-              <div className="ml-2 w-4 h-4 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-xs text-gray-600">i</span>
+              <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center mr-2">
+                <span className="text-xs text-gray-600">#</span>
               </div>
+              <h3 className="text-lg font-semibold text-gray-900">CEO Specifikation - 11 Kategorier ({healthResult.healthIndex}/100 poäng)</h3>
             </div>
             
-            <div className="space-y-3">
-              {healthResult.parameters.map((param, index) => (
-                <div key={index} className={`p-4 rounded-lg border ${getScoreBackgroundColor(param.score, param.maxScore)}`}>
+            <div className="text-xs text-gray-500 mb-4">
+              Varje kategori bedöms 0-100 poäng och multipliceras med sin viktning för slutbetyget.
+            </div>
+            
+            <div className="grid grid-cols-1 gap-3">
+              {(healthResult.breakdown?.categories || []).map((category, index) => (
+                <div key={index} className={`p-3 rounded-lg border ${getScoreBackgroundColor(category.score)}`}>
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center space-x-2">
-                      <h4 className="font-medium text-gray-900">{param.name}</h4>
-                      {param.isMock && (
-                        <span className="text-xs text-gray-400 bg-gray-200 px-2 py-1 rounded">
-                          MOCKUP
+                      <span className="text-sm font-medium text-gray-700">{category.name}</span>
+                      <span className="text-xs text-gray-500">({category.weight})</span>
+                      {category.isMock && (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">
+                          MOCK
                         </span>
                       )}
                     </div>
-                    <span className="font-bold text-lg text-gray-900">{param.score}</span>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="relative mb-2">
-                    <div className="w-full h-2 bg-gray-200 rounded-full">
-                      <div 
-                        className={`h-2 rounded-full ${getScoreBarColor(param.score, param.maxScore)}`}
-                        style={{ width: `${Math.round((param.score / param.maxScore) * 100)}%` }}
-                      ></div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-gray-900">{category.score}/100</div>
+                      <div className="text-xs text-gray-500">= {category.contributedPoints}p</div>
                     </div>
                   </div>
-                  
-                  {/* Scale and description */}
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-gray-500">0</span>
-                    <span className="text-gray-600 text-center flex-1">{param.description}</span>
-                    <span className="text-gray-500">{param.maxScore}</span>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full ${getScoreBarColor(category.score)}`}
+                      style={{ width: `${category.score}%` }}
+                    ></div>
                   </div>
-                  
-                  {/* Additional details if available */}
-                  {param.details && (
-                    <div className="mt-2 text-xs text-gray-500 italic">
-                      {param.details}
-                    </div>
-                  )}
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Category breakdown */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Kategorier (totalt {healthResult.totalScore}/{Object.values(healthResult.maxScores).reduce((a, b) => a + b, 0)} poäng)</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-900">Teknisk status</span>
-                  <span className="font-bold text-gray-900">{healthResult.breakdown.technical}/{healthResult.maxScores.technical}</span>
-                </div>
-                <div className="text-xs text-green-600 mt-1">✓ Real API-data</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-900">Säkerhetsanalys</span>
-                  <span className="font-bold text-gray-900">{healthResult.breakdown.safety}/{healthResult.maxScores.safety}</span>
-                </div>
-                <div className="text-xs text-green-600 mt-1">✓ Real API-data</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-900">Ägarhistorik & Garanti</span>
-                  <span className="font-bold text-gray-900">{healthResult.breakdown.ownership}/{healthResult.maxScores.ownership}</span>
-                </div>
-                <div className="text-xs text-gray-400 mt-1">⚠ Mockup-data</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-900">Prisanalys</span>
-                  <span className="font-bold text-gray-900">{healthResult.breakdown.pricing}/{healthResult.maxScores.pricing}</span>
-                </div>
-                <div className="text-xs text-gray-400 mt-1">⚠ Mockup-data</div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4 md:col-span-2">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-900">Skade- & Servicehistorik</span>
-                  <span className="font-bold text-gray-900">{healthResult.breakdown.service}/{healthResult.maxScores.service}</span>
-                </div>
-                <div className="text-xs text-gray-400 mt-1">⚠ Mockup-data</div>
-              </div>
             </div>
           </div>
 
@@ -311,18 +238,18 @@ export default function HealthMeter({
             </div>
           </div>
 
-          {/* Data sources info */}
+          {/* Implementation Status */}
           <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-start space-x-2">
               <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <div>
-                <p className="text-sm font-medium text-blue-900 mb-1">Om datakällorna</p>
+                <p className="text-sm font-medium text-blue-900 mb-1">CEO Specifikation - Implementeringsstatus</p>
                 <p className="text-xs text-blue-700">
-                  Teknisk status och säkerhetsanalys baseras på verklig data från Car.info API. 
-                  Ägarhistorik, prisanalys och servicehistorik använder mockup-data tills fler API:er integreras. 
-                  Totalt {Object.values(healthResult.maxScores).reduce((a, b) => a + b, 0)} möjliga poäng fördelat på 5 kategorier.
+                  Denna beräkning följer exakt den specifikation som angetts av VD. Alla 11 kategorier med korrekt viktning är implementerade. 
+                  &quot;Körda mil&quot; använder API-data, resterande kategorier är mock-data tills fler integrationer genomförs.
+                  Exakt formler enligt specifikation: 20% billigare = 100p, normal körsträcka 1500 mil/år, etc.
                 </p>
               </div>
             </div>

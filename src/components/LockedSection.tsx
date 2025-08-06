@@ -34,7 +34,7 @@ export default function LockedSection({
       }
     };
     checkLogin();
-  }, []);
+  }, [supabase.auth]);
 
   const handleUnlock = async () => {
     if (!isLoggedIn) {
@@ -51,7 +51,7 @@ export default function LockedSection({
       const compareRegnr = urlParams.get('compare');
       const reportType = compareRegnr ? 'comparison' : 'single';
 
-      const success = await unlockReport(regnr, reportType);
+      const success = await unlockReport(regnr, reportType, undefined, compareRegnr);
 
       if (success) {
         // Success - everything is now unlocked!

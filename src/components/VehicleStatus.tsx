@@ -1,17 +1,9 @@
-import type { CarInfoApiResponse } from '@/types/vehicle';
+
 import { ShieldCheck } from 'lucide-react';
 
-interface VehicleStatusProps {
-  vehicleData: CarInfoApiResponse;
-  registrationNumber?: string;
-  isComparison?: boolean;
-}
+// Interface kept for future API integration
 
-export default function VehicleStatus({ 
-  vehicleData, 
-  registrationNumber, 
-  isComparison = false 
-}: VehicleStatusProps) {
+export default function VehicleStatus() {
   
   // Vehicle status checks - MOCK DATA since not available from Car.info API
   const statusChecks = [
@@ -55,6 +47,7 @@ export default function VehicleStatus({
         <div>
           <h2 className="text-xl font-bold text-gray-900">
             Fordonsstatus
+            <span className="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">MOCK</span>
           </h2>
           <p className="text-sm text-gray-600">
             Fyra viktiga kontroller

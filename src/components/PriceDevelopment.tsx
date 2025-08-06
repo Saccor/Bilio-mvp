@@ -1,5 +1,5 @@
 'use client';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import type { CarInfoApiResponse } from '@/types/vehicle';
 
 interface PriceDevelopmentProps {
@@ -9,9 +9,7 @@ interface PriceDevelopmentProps {
 }
 
 export default function PriceDevelopment({ 
-  vehicleData, 
-  registrationNumber, 
-  isComparison = false 
+  vehicleData
 }: PriceDevelopmentProps) {
   
   const vehicleBrand = vehicleData.result?.brand || 'UNKNOWN';
@@ -38,6 +36,7 @@ export default function PriceDevelopment({
         <div>
           <h2 className="text-xl font-bold text-gray-900">
             Värdeminskning över tid
+            <span className="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">MOCK</span>
           </h2>
           <p className="text-sm text-gray-600">
             Estimerat värdetapp för {vehicleBrand} {vehicleModel}

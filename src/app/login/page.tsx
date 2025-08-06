@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabaseClient';
+import Link from 'next/link';
+
 
 export default function LoginPage() {
   const supabase = createClient();
@@ -71,9 +73,9 @@ export default function LoginPage() {
           <a href="/debug-oauth" className="block text-sm text-blue-600 hover:text-blue-700">
             🔍 Debug OAuth Information
           </a>
-          <a href="/" className="text-sm text-gray-600 hover:text-gray-800 font-medium">
+          <Link href="/" className="text-sm text-gray-600 hover:text-gray-800 font-medium">
             ← Tillbaka till startsidan
-          </a>
+          </Link>
         </div>
       </div>
     </main>

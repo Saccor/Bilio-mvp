@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import UserButton from './UserButton';
 
 export default function Header() {
@@ -19,39 +20,40 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="/" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <img 
                 src="/Startup Car Selling Logo with Blue and White Palette.png" 
                 alt="Bilio" 
                 className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg object-cover"
               />
               <span className="ml-2 text-lg font-bold text-gray-900 hidden sm:block">Bilio</span>
-            </a>
+            </Link>
           </div>
           
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-1">
-            <a 
-              href="/" 
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                mounted && pathname === '/' 
-                  ? 'text-gray-900 bg-gray-100' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              Jämför
-            </a>
-            <a 
-              href="/om-bilio" 
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                mounted && pathname === '/om-bilio' 
-                  ? 'text-gray-900 bg-gray-100' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              Om Bilio
-            </a>
-          </nav>
+                  {/* Desktop Navigation */}
+        <nav className="hidden md:flex space-x-1">
+          <Link 
+            href="/" 
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              mounted && pathname === '/' 
+                ? 'text-gray-900 bg-gray-100' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            }`}
+          >
+            Jämför
+          </Link>
+          <Link 
+            href="/om-bilio" 
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              mounted && pathname === '/om-bilio' 
+                ? 'text-gray-900 bg-gray-100' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            }`}
+            prefetch={false}
+          >
+            Om Bilio
+          </Link>
+        </nav>
 
           {/* Mobile menu button & User Authentication */}
           <div className="flex items-center space-x-2">
@@ -78,7 +80,7 @@ export default function Header() {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 space-y-2 border-t border-gray-200 mt-2">
-            <a 
+            <Link 
               href="/" 
               className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 mounted && pathname === '/' 
@@ -88,8 +90,8 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Jämför
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/om-bilio" 
               className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 mounted && pathname === '/om-bilio' 
@@ -97,9 +99,10 @@ export default function Header() {
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
+              prefetch={false}
             >
               Om Bilio
-            </a>
+            </Link>
             <div className="sm:hidden pt-2 border-t border-gray-200">
               <UserButton />
             </div>

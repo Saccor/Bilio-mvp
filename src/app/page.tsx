@@ -13,7 +13,10 @@ export default function Home() {
     e.preventDefault();
     if (regnr1.trim()) {
       // Navigate to results page with registration number
-      const params = new URLSearchParams({ regnr: regnr1.trim().toUpperCase() });
+      const params = new URLSearchParams({ 
+        regnr: regnr1.trim().toUpperCase(),
+        fromSearch: 'true' // Markera att detta är en ny sökning
+      });
       if (regnr2.trim()) {
         params.append('compare', regnr2.trim().toUpperCase());
       }

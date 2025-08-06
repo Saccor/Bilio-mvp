@@ -25,27 +25,35 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { registration_number, report_type = 'single' } = body;
+    const { registration_number, report_type = 'single', sessionId, comparison_registration } = body;
 
     if (!registration_number) {
       return NextResponse.json({ error: 'Registration number is required' }, { status: 400 });
     }
 
-    // Check if user already has access to this report
-    const { data: existingReport } = await supabase
-      .from('vehicle_reports')
-      .select('id, unlocked_at')
-      .eq('user_id', user.id)
-      .eq('registration_number', registration_number)
-      .eq('report_type', report_type)
-      .maybeSingle();
-
-    if (existingReport?.unlocked_at) {
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Report already unlocked',
-        already_unlocked: true 
-      });
+    // För MVP: Varje sökning kräver ny betalning, även för samma bil
+    // Kolla endast om denna specifika session redan är betald
+    let existingReport = null;
+    
+    if (sessionId) {
+      const { data } = await supabase
+        .from('vehicle_reports')
+        .select('id, unlocked_at')
+        .eq('user_id', user.id)
+        .eq('registration_number', registration_number)
+        .eq('report_type', report_type)
+        .ilike('report_data->sessionId', sessionId)
+        .maybeSingle();
+      
+      existingReport = data;
+      
+      if (existingReport?.unlocked_at) {
+        return NextResponse.json({ 
+          success: true, 
+          message: 'Report already unlocked for this session',
+          already_unlocked: true 
+        });
+      }
     }
 
     // Use 1 credit to unlock the report
@@ -67,11 +75,15 @@ export async function POST(request: Request) {
     const reportData = {
       user_id: user.id,
       registration_number,
+      comparison_registration: comparison_registration || null,
       report_type,
       credits_used: 1,
       unlocked_at: new Date().toISOString(),
-      unlock_type: report_type === 'comparison' ? 'comparison_unlock' : 'single_unlock',
-      report_data: { unlocked: true, timestamp: new Date().toISOString() }
+      report_data: { 
+        unlocked: true, 
+        timestamp: new Date().toISOString(),
+        sessionId: sessionId || `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      }
     };
 
     if (existingReport) {
@@ -86,7 +98,7 @@ export async function POST(request: Request) {
         // Note: Credits already deducted, so we don't fail here
       }
     } else {
-      // Create new report record
+      // Skapa alltid ny rapport för varje sökning (även samma bil)
       const { error: insertError } = await supabase
         .from('vehicle_reports')
         .insert(reportData);

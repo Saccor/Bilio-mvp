@@ -18,32 +18,43 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse med ett kom
 
 ### **🔐 Autentisering & Användarsystem**
 - **Google OAuth-inloggning** via Supabase
-- **Automatisk användarprofiler** med kreditsaldo
+- **Automatiska användarprofiler** med kreditsaldo
 - **Säker session-hantering** med cookies
 - **Row Level Security (RLS)** för all data
+- **Användardashboard** med tidigare analyser och kredithistorik
+- **Dropdown-meny** med "Mina sidor" och "Logga ut"
 
-### **💳 Kreditsystem**
+### **💳 Kreditsystem (MVP)**
+- **Nytt kreditsystem**: Varje registreringsnummer-slagning kostar 1 kredit (även tidigare körda)
+- **Gratis åtkomst**: Tidigare analyser kan ses gratis via dashboard/konto
+- **Real-time uppdateringar**: Kreditsaldo uppdateras omedelbart efter användning
 - **Flexibla kreditpaket**: Från enstaka rapporter till bulk-köp
 - **Atomiska transaktioner** för säker kredithantering
 - **Detaljerad transaktionshistorik** för alla köp och användning
 - **Demo-funktion** för testning utan betalning
-- **Rapportlåsning** med 1-kredit-systemet
+- **Session-baserat system** för att särskilja nya sökningar från dashboard-åtkomst
 
 ### **📊 Omfattande fordonsanalys med riktiga API-data**
 - **Komplett fordonsrapport**: Förvandla registreringsnummer till detaljerade fordonsprofiler
 - **Real API-integration**: Car.info API för verklig fordonsdata
-- **Bilhälsometer**: Visuell hälsostatus med 10 parametrar (230 poäng max)
+- **11-kategori Bilhälsometer**: CEO:s exakta viktade poängsystem (A-E betyg)
+  - Pris mot marknaden (12%), Fordonsstatus (11%), Körda mil (11%)
+  - Antal ägare (9%), Nybilsgaranti (6%), Värdetapp 5 år (11%)
+  - Säkerhet Euro-NCAP (11%), Utrustning (11%), Servicebok (7%)
+  - Skadehistorik (7%), Kända problem (4%)
 - **Prisanalys**: Jämför marknadsvärde med aktuella priser
 - **Jämförelseläge**: Parallell analys av två fordon
+- **Smart dataåteranvändning**: För demo-ändamål när samma bil jämförs
 
-### **🚗 Detaljerade fordonssektioner**
-- **Fordonsstatus**: Teknisk status och kritiska flaggor med API-data
-- **Ägarhistorik & Garanti**: Komplett ägarhistorik och garantiinformation
-- **Prisutveckling**: Interaktiv linjediagram med 18 månaders pristrend
-- **Säkerhetsanalys**: Euro NCAP-betyg och säkerhetsutrustning från API
-- **Skade- & Servicehistorik**: Detaljerad timeline för underhåll och skador
-- **Säljaresinformation**: Återförsäljarbedömning och kontaktuppgifter
-- **Tekniska specifikationer**: Motor, prestanda och dimensioner
+### **🚗 Detaljerade fordonssektioner med API/MOCK-märkning**
+- **Fordonsstatus**: Teknisk status och kritiska flaggor (MOCK)
+- **Ägarhistorik & Garanti**: Komplett ägarhistorik och garantiinformation (MOCK)
+- **Prisutveckling**: Interaktiv linjediagram med 18 månaders pristrend (MOCK)
+- **Säkerhetsanalys**: Euro NCAP-betyg och säkerhetsutrustning (MOCK)
+- **Skade- & Servicehistorik**: Detaljerad timeline för underhåll och skador (MOCK)
+- **Säljaresinformation**: Återförsäljarbedömning och kontaktuppgifter (MOCK)
+- **Tekniska specifikationer**: Motor, prestanda och dimensioner (API + MOCK)
+- **Bilhälsometer**: Viktad poängberäkning med real miltal-data (API + MOCK)
 
 ### **💰 Interaktiv kostnadskalkylator**
 - **Realtidsberäkningar**: Orange sliders för körsträcka (1,000-10,000 km) och tid (1-10 år)
@@ -59,9 +70,9 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse med ett kom
 ### **Hem (/) - Huvudsidan**
 - **Hero-sektion** med sökformulär för 1-2 registreringsnummer
 - **Funktionskort** som visar alla tjänster
-- **Prismodeller**: 149 kr (analys) / 199 kr (jämförelse)
-- **"Vad ingår?"-sektion** med 14 funktioner listade
-- **Responsiv design** för alla enheter
+- **Moderniserat tema**: Clean, minimalistisk design
+- **"Vad ingår?"-sektion** med alla funktioner listade
+- **Responsiv design** för alla enheter (mobilvänlig)
 
 ### **Resultat (/results) - Huvudanalyssidan**
 - **Kreditsystem-integration** med uppgraderingsbanderoll
@@ -69,12 +80,23 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse med ett kom
 - **Låsta sektioner** som kräver 1 kredit för upplåsning
 - **Alla komponenter** stöder både enstaka och jämförelseläge
 - **Real-time API-data** kombinerat med simulerad data
+- **Smart felhantering**: Graceful fallback för API-begränsningar
+- **Session-ID tracking**: Särskiljer nya sökningar från dashboard-åtkomst
+
+### **Dashboard (/dashboard) - Användarprofil**
+- **Användaröverstikt**: Profil med email och inloggningsstatus
+- **Kreditsaldo**: Aktuellt saldo och total köpt
+- **Snabbåtgärder**: Köp krediter och ny analys
+- **Tidigare analyser**: Klickbara länkar till alla tidigare rapporter
+- **Kredithistorik**: Komplett transaktionshistorik
+- **Supabase-integration**: Real data från databas
 
 ### **Om Bilio (/om-bilio)**
 - **Mörkgradient hero** med statistik (10,000+ jämförelser)
 - **"Så fungerar Bilio"**: 3-stegs process med ikoner
 - **"Varför Bilio?"**: 4 funktionskort på orange bakgrund
 - **Interaktiv FAQ**: 7 vikbara frågor med HTML details/summary
+- **Mobil-responsiv**: Optimerad för alla skärmstorlekar
 
 ### **Krediter (/credits/purchase)**
 - **Kreditpaket-val** med 4 olika nivåer
@@ -108,6 +130,7 @@ Bilio är Sveriges ledande plattform för bilanalys och jämförelse med ett kom
 - **Car.info Demo API** - Real fordonsdata via proxy
 - **Next.js API Routes** - Serverlösa API-endpoints
 - **CORS-hantering** - Via Next.js API-proxy för säker dataåtkomst
+- **Graceful API fallbacks** - Smart hantering av API-begränsningar
 
 ## 🏗 **Projektarkitektur**
 
@@ -117,6 +140,7 @@ src/
 │   ├── page.tsx                     # Svensk startsida med sökformulär
 │   ├── layout.tsx                   # Root layout med Header/Footer
 │   ├── globals.css                  # Globala stilar
+│   ├── dashboard/page.tsx           # Användardashboard med analyser
 │   ├── om-bilio/page.tsx           # Om Bilio-sida
 │   ├── results/page.tsx            # Resultatsida med alla komponenter
 │   ├── login/page.tsx              # Google OAuth-inloggning
@@ -132,37 +156,37 @@ src/
 │       │   ├── transactions/route.ts # Transaktionshistorik
 │       │   └── use/route.ts        # Kreditanvändning
 │       └── reports/
-│           ├── check-access/[regNr]/route.ts # Åtkomstkontroll
-│           └── unlock/route.ts     # Rapportupplåsning
+│           ├── check-access/[regNr]/route.ts # Åtkomstkontroll med sessionId
+│           └── unlock/route.ts     # Rapportupplåsning med comparison_registration
 ├── components/
-│   ├── Header.tsx                  # Global navigation med UserButton
-│   ├── Footer.tsx                  # Global sidfot
-│   ├── UserButton.tsx              # Autentisering & användarmeny
-│   ├── CreditBalance.tsx           # Kreditsaldo-visning
+│   ├── Header.tsx                  # Global navigation utan Dashboard-länk
+│   ├── Footer.tsx                  # Global sidfot utan Priser/Kontakt
+│   ├── UserButton.tsx              # Dropdown-meny med Mina sidor/Logga ut
+│   ├── CreditBalance.tsx           # Kreditsaldo med real-time uppdateringar
 │   ├── CreditPackages.tsx          # Kreditpaket-val
 │   ├── LockedSection.tsx           # Låst innehåll med upplåsning
-│   ├── VehicleCard.tsx             # Fordonsöversikt med API-data
-│   ├── HealthMeter.tsx             # Bilhälsometer (10 parametrar)
-│   ├── VehicleStatus.tsx           # Teknisk fordonsstatus
-│   ├── OwnerHistory.tsx            # Ägarhistorik & garanti
-│   ├── PriceDevelopment.tsx        # Prisutveckling med recharts
-│   ├── SafetyAnalysis.tsx          # Säkerhetsanalys med API-data
-│   ├── VehicleSpecifications.tsx   # Tekniska specifikationer
-│   ├── DamageAndService.tsx        # Skade- & servicehistorik
-│   ├── PriceAnalysis.tsx           # Prisanalys
-│   ├── CostCalculator.tsx          # Kostnadskalkylator
-│   └── SellerInformation.tsx       # Återförsäljareinfo
+│   ├── VehicleCard.tsx             # Fordonsöversikt med API-märkning
+│   ├── HealthMeter.tsx             # 11-kategori viktad bilhälsometer
+│   ├── VehicleStatus.tsx           # Teknisk fordonsstatus med MOCK-märkning
+│   ├── OwnerHistory.tsx            # Ägarhistorik & garanti med MOCK-märkning
+│   ├── PriceDevelopment.tsx        # Prisutveckling med MOCK-märkning
+│   ├── SafetyAnalysis.tsx          # Säkerhetsanalys med MOCK-märkning
+│   ├── VehicleSpecifications.tsx   # Tekniska specifikationer med API+MOCK-märkning
+│   ├── DamageAndService.tsx        # Skade- & servicehistorik med MOCK-märkning
+│   ├── PriceAnalysis.tsx           # Prisanalys med MOCK-märkning
+│   ├── CostCalculator.tsx          # Kostnadskalkylator med MOCK-märkning
+│   └── SellerInformation.tsx       # Återförsäljareinfo med MOCK-märkning
 ├── lib/
 │   └── supabaseClient.ts           # Supabase klient-konfiguration
 ├── contexts/
-│   └── UnlockContext.tsx           # Upplåsningslogik för rapporter
+│   └── UnlockContext.tsx           # Upplåsningslogik med real-time credit updates
 ├── services/
 │   └── vehicle-service.ts          # Fordonstjänst med API-orchestration
 ├── types/
 │   └── vehicle.ts                  # TypeScript-gränssnitt
 ├── utils/
 │   ├── vehicle-transformers.ts     # API-transformering och mock-data
-│   └── health-calculator.ts        # Bilhälsometer-beräkningar
+│   └── health-calculator.ts        # CEO:s exakta 11-kategori poängsystem
 └── config/
     └── data-sources.ts             # Datakällkonfiguration
 ```
@@ -174,7 +198,7 @@ src/
 - **credit_packages** - Tillgängliga kreditpaket
 - **credit_transactions** - All kreditaktivitet
 - **payments** - Betalningshistorik (framtida)
-- **vehicle_reports** - Sparade fordonsrapporter
+- **vehicle_reports** - Sparade fordonsrapporter med comparison_registration och sessionId
 
 ### **PostgreSQL Functions**
 - **add_credits()** - Lägg till krediter atomiskt
@@ -215,6 +239,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 - Kör SQL-skripten i Supabase SQL Editor:
   - `SUPABASE_SETUP.sql` (grundläggande schema)
   - `SUPABASE_UPDATED_SETUP.sql` (uppdateringar)
+  - `MIGRATION_ADD_COMPARISON_FIELD.sql` (jämförelse-stöd)
 - Konfigurera Google OAuth i Supabase Dashboard
 
 5. **Starta utvecklingsserver**
@@ -228,25 +253,31 @@ Navigera till `http://localhost:3000` i din webbläsare.
 ## 📖 **Användarguide**
 
 ### **Autentisering**
-1. Klicka "Logga in" i headern
-2. Välj "Logga in med Google"
+1. Klicka användarikonen i headern (dropdown-meny)
+2. Välj "Logga in med Google" om ej inloggad
 3. Användarprofil skapas automatiskt med 0 krediter
 
 ### **Köpa krediter**
 1. Gå till "Köp krediter" från användarmeny eller banderoll
-2. Välj kreditpaket (149-1000 krediter)
+2. Välj kreditpaket (1-10 analyser)
 3. Klicka "Lägg till krediter (Mockup)" för demo
 
-### **Analysera fordon**
+### **Analysera fordon (MVP-systemet)**
 1. Ange svenskt registreringsnummer (ex. `VVV999`) på startsidan
 2. Valfritt: Lägg till andra bil för jämförelse
-3. Klicka "Ange registreringsnummer för att börja"
-4. Se förhandsgranskning med alla komponenter
+3. Klicka "Analysera" - kostar 1 kredit även för tidigare körda bilar
+4. Se förhandsgranskning med API/MOCK-märkta sektioner
 5. Klicka "Lås upp för en kredit" för full åtkomst
+6. Kreditsaldo uppdateras omedelbart
+
+### **Åtkomst till tidigare analyser**
+1. Gå till "Mina sidor" från användarmenyn
+2. Klicka på tidigare analyser för gratis åtkomst
+3. Alla tidigare låsta sektioner är tillgängliga utan extra kostnad
 
 ### **Jämföra fordon**
 - Ange två registreringsnummer för sida-vid-sida-jämförelse
-- Alla komponenter visas parallellt
+- Alla komponenter visas parallellt med smart dataåteranvändning
 - Kostar 1 kredit för upplåsning av full jämförelse
 
 ## 🎨 **Design & UX**
@@ -257,6 +288,12 @@ Navigera till `http://localhost:3000` i din webbläsare.
 - **Säkerhet**: Grön för positiva värden, röd för varningar
 - **Bakgrund**: Moderna gradients och vita kort-design
 
+### **Moderniserat tema**
+- **Clean minimalistisk design** genomgående
+- **Konsekvent shadow-sm** och border-styling
+- **Förbättrade kontraster** för bättre läsbarhet
+- **Mobilvänlig** responsive design
+
 ### **Svenskt fokus**
 - **Helt svenskt gränssnitt** med naturlig terminologi
 - **Svenska registreringsnummer** som huvudinput
@@ -265,6 +302,7 @@ Navigera till `http://localhost:3000` i din webbläsare.
 
 ### **Responsiv design**
 - **Mobile-first** approach för alla komponenter
+- **iPhone X-optimering** för modern mobile UX
 - **Tablet-optimering** för mellanstorleksenheter
 - **Desktop-enhancement** för större skärmar
 - **Konsekvent spacing** med Tailwind CSS-klasser
@@ -276,12 +314,19 @@ Navigera till `http://localhost:3000` i din webbläsare.
 - **Säkerhetsutrustning**: Airbags, ABS, BLIS, assistanssystem
 - **Utrustningslista**: Detaljerad lista över fordonsutrustning
 - **Grundläggande info**: Märke, modell, årsmodell, färg
+- **Miltal-data**: Real körda mil för hälsometerberäkningar
 
 ### **Mock Data (Simulerade värden)**
 - **Prisanalys**: Marknadspriser och värdering
 - **Ägarhistorik**: Antal ägare och ägarbyten
 - **Skadehistorik**: Registrerade skador och service
 - **Kostnadskalkyler**: Värdeminskning, försäkring, service
+- **10 av 11 hälsometerkategorier**: Viktade poängberäkningar
+
+### **Smart API-hantering**
+- **Graceful fallbacks**: 500-fel behandlas som demo API-begränsningar
+- **Dataåteranvändning**: Samma bil i jämförelse använder samma data
+- **Felhantering**: Tydliga meddelanden om API-begränsningar
 
 ### **Framtida API-integrationer**
 - **Bilregister**: Real ägarhistorik och fordonsstatus
@@ -289,23 +334,24 @@ Navigera till `http://localhost:3000` i din webbläsare.
 - **Marknadsdata**: Real priser och värderingstrender
 - **Servicehistorik**: Verklig service och reparationsdata
 
-## 📊 **Kreditsystem & Prissättning**
+## 📊 **Kreditsystem & Prissättning (MVP)**
 
 ### **Kreditpaket**
-1. **Bilrapport** - 149 krediter (149 kr)
-2. **Jämförelse** - 199 krediter (199 kr)  
-3. **Value Pack** - 500 krediter (399 kr)
-4. **Premium** - 1000 krediter (749 kr)
+1. **1 Analys** - 1 kredit (149 kr)
+2. **3 Analyser** - 3 krediter (399 kr, spara 50 kr)
+3. **5 Analyser** - 5 krediter (599 kr, spara 150 kr)
+4. **10 Analyser** - 10 krediter (999 kr, spara 500 kr)
 
-### **Användning**
-- **Enstaka rapport**: 1 kredit för upplåsning
-- **Jämförelse**: 1 kredit för parallell analys
+### **Användning (MVP-systemet)**
+- **Varje ny sökning**: 1 kredit oavsett om regnr körts tidigare
+- **Dashboard-åtkomst**: Gratis för tidigare låsta rapporter
 - **Alla sektioner**: Låses upp samtidigt per rapport
+- **Real-time uppdateringar**: Kreditsaldo uppdateras omedelbart
 
 ### **Demo-funktionalitet**
 - **Kostnadsfri förhandsgranskning** av alla funktioner
 - **Mockup-kreditering** för testning utan betalning
-- **Tydlig markering** av simulerad data vs real data
+- **Tydlig API/MOCK-märkning** av datakällor
 
 ## 🧪 **Utveckling**
 
@@ -324,13 +370,22 @@ npm run lint        # Kör ESLint
 - **Modulär komponentarkitektur** för skalbarhet
 - **Service Layer Pattern** för API-orchestration
 - **Context API** för global state (UnlockContext)
+- **Event-driven credit updates** för real-time UX
 
 ### **Dataflöde**
 1. **API Layer**: Next.js API routes för CORS-hantering
 2. **Service Layer**: vehicle-service.ts för dataorkestrering  
 3. **Transform Layer**: vehicle-transformers.ts för API-datakonvertering
 4. **Component Layer**: React-komponenter med TypeScript
-5. **Context Layer**: UnlockContext för rapportlåsning
+5. **Context Layer**: UnlockContext för rapportlåsning och credit tracking
+6. **Database Layer**: Supabase med RLS för säker datahantering
+
+### **Nyckelfunktioner för utvecklare**
+- **Session-ID tracking**: Särskiljer nya sökningar från dashboard-åtkomst
+- **Smart error handling**: Graceful degradation för API-fel
+- **Real-time credit updates**: Event-driven UI-uppdateringar
+- **Responsive design system**: Konsekvent mobilvänlig UX
+- **API/MOCK separation**: Tydlig markering av datakällor
 
 ## 🔮 **Framtida förbättringar**
 
@@ -374,10 +429,13 @@ Detta projekt är licensierat under MIT-licensen - se [LICENSE](LICENSE)-filen f
 Använd `/debug-oauth` för att diagnostisera Google OAuth-konfiguration.
 
 ### **Kreditsystem-problem**
-Kontrollera Supabase-loggar och RLS-policies.
+Kontrollera Supabase-loggar och RLS-policies. Kreditsaldo uppdateras nu real-time.
 
 ### **API-problem**
-Car.info API-fel loggas i browser console och server-loggar.
+Car.info API-fel loggas i browser console och server-loggar. Smart fallback hanterar demo API-begränsningar.
+
+### **Jämförelse-problem**
+Dashboard-jämförelser använder nu sparad comparison_registration. Samma bil i jämförelse återanvänder data smart.
 
 För support, frågor eller funktionsförfrågningar:
 - Skapa en issue i repositoriet
@@ -387,3 +445,35 @@ För support, frågor eller funktionsförfrågningar:
 ---
 
 **Bilio** - Gör bilköpet transparent och tryggt för alla svenskar 🚗✨
+
+## 📝 **Senaste uppdateringar (Chat History)**
+
+### **🎨 Tema & Design**
+- **Moderniserat tema**: Clean, minimalistisk design genomgående
+- **Mobiloptimering**: iPhone X-responsiv design för alla komponenter
+- **Förbättrade kontraster**: Bättre läsbarhet och användarvänlighet
+- **Konsekvent styling**: Shadow-sm och border-styling överallt
+
+### **👤 Användarsystem**
+- **Användardashboard**: Komplett profil med tidigare analyser och kredithistorik
+- **Dropdown-navigation**: UserButton med "Mina sidor" och "Logga ut"
+- **Real-time credit updates**: Omedelbar UI-uppdatering vid kreditanvändning
+- **Session-based tracking**: Smart åtskillnad mellan nya sökningar och dashboard-åtkomst
+
+### **💳 MVP Kreditsystem**
+- **Nytt modell**: Varje regnr-slagning kostar 1 kredit oavsett tidigare användning
+- **Gratis dashboard-åtkomst**: Tidigare analyser tillgängliga utan extra kostnad
+- **Event-driven updates**: Real-time kreditsaldo-uppdateringar
+- **Smart session tracking**: SessionId särskiljer nya sökningar från återbesök
+
+### **🚗 Bilanalys-förbättringar**
+- **CEO:s hälsometer**: Exakt 11-kategori viktad poängsystem (A-E betyg)
+- **API/MOCK-märkning**: Tydlig markering av datakällor i alla sektioner
+- **Smart jämförelse**: Återanvändning av data för samma bil i jämförelser
+- **Graceful API-hantering**: Robust felhantering för demo API-begränsningar
+
+### **🔧 Tekniska förbättringar**
+- **Next.js 15 kompatibilitet**: Awaited params i dinamiska routes
+- **Hydration fixes**: Säker SSR/client-rendering
+- **Improved error handling**: Graceful degradation för alla API-fel
+- **Database enhancements**: comparison_registration stöd för jämförelser

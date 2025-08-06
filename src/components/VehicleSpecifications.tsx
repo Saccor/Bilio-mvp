@@ -1,32 +1,24 @@
 import { useState } from 'react';
-import type { CarInfoApiResponse } from '@/types/vehicle';
+
 import { Key, Settings, Zap, Info, Cog } from 'lucide-react';
 
-interface VehicleSpecificationsProps {
-  vehicleData: CarInfoApiResponse;
-  registrationNumber?: string;
-  isComparison?: boolean;
-}
+// Interface kept for future API integration
 
-export default function VehicleSpecifications({ 
-  vehicleData, 
-  registrationNumber, 
-  isComparison = false 
-}: VehicleSpecificationsProps) {
+export default function VehicleSpecifications() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSection(expandedSection === sectionId ? null : sectionId);
   };
 
-  // Extract real data from API
-  const brand = vehicleData.result?.brand || '';
-  const model = vehicleData.result?.model || '';
-  const variant = vehicleData.result?.series || vehicleData.result?.trim_package || '';
-  const year = vehicleData.result?.model_year || vehicleData.result?.year || 0;
-  const fuelType = vehicleData.result?.fuel_type || '';
-  const horsepower = vehicleData.result?.horsepower || 0;
-  const firstRegistration = vehicleData.result?.first_registration_date || '';
+  // Mock data for demonstration (would normally come from API)
+  const brand = 'Volvo';
+  const model = 'XC60';
+  const variant = 'T8 AWD';
+  const year = 2020;
+  const fuelType = 'Hybrid';
+  const horsepower = 400;
+  const firstRegistration = '2020-03-15';
 
   // Mock data for fields not available from Car.info API
   const mockData = {
@@ -120,6 +112,7 @@ export default function VehicleSpecifications({
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       <h2 className="text-xl font-bold text-center text-gray-900 mb-6">
         Specifikationer
+        <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">API + MOCK</span>
       </h2>
       
       <div className="space-y-4">

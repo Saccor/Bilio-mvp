@@ -9,12 +9,6 @@ interface VehicleCardProps {
 
 export default function VehicleCard({ vehicle, registrationNumber, isComparison = false }: VehicleCardProps) {
   /** MOCK DATA - Vissa beräkningar baseras på real API-data men värdena är simulerade */
-  const getTaxFromCO2 = (co2: number) => Math.round(2000 + (co2 * 25)); // MOCK calculation
-  const getNextInspectionDate = () => { // MOCK data
-    const currentYear = new Date().getFullYear();
-    const nextYear = currentYear + 1;
-    return `${nextYear}-03-10`;
-  };
 
   return (
     <div className={`bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden ${isComparison ? 'h-fit' : 'mb-8'}`}>
@@ -65,6 +59,7 @@ export default function VehicleCard({ vehicle, registrationNumber, isComparison 
         {/* Main Header */}
         <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">
           {vehicle.brand} {vehicle.model}
+          <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">API</span>
         </h3>
 
         {/* Comprehensive Vehicle Information Grid */}

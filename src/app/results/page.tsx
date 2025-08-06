@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { vehicleService } from '@/services/vehicle-service';
 import type { Vehicle, CarInfoApiResponse } from '@/types/vehicle';
 import VehicleCard from '@/components/VehicleCard';
@@ -24,6 +25,20 @@ export default function Results() {
   const regnr = searchParams.get('regnr');
   const compareRegnr = searchParams.get('compare');
   const isComparison = Boolean(compareRegnr);
+  
+  // Generate sessionId for new searches (not from dashboard)
+  const [sessionId] = useState(() => {
+    // If this is a dashboard access (no sessionId in URL), don't generate one
+    const existingSessionId = searchParams.get('sessionId');
+    if (existingSessionId) return existingSessionId;
+    
+    // Check if this is likely a dashboard access (based on referrer or lack of form submission)
+    // Only check document.referrer on client side
+    const isDashboardAccess = (typeof window !== 'undefined' && document.referrer.includes('/dashboard')) || 
+                            !searchParams.get('fromSearch');
+    
+    return isDashboardAccess ? null : `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  });
   
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [vehicleRawData, setVehicleRawData] = useState<CarInfoApiResponse | null>(null);
@@ -61,21 +76,34 @@ export default function Results() {
 
         // Fetch comparison vehicle data if provided
         if (compareRegnr) {
-          const compareResult = await vehicleService.getVehicleData({
-            type: 'license-plate',
-            country: 'S',
-            id: compareRegnr
-          });
-
-          if (compareResult.success && compareResult.data) {
-            setCompareVehicle(compareResult.data);
-            setCompareVehicleRawData(compareResult.rawApiData || null); // Store raw API data
+          // For demo purposes: if comparing same car, reuse the data
+          if (compareRegnr === regnr && result.success && result.data) {
+            console.log('Demo: Reusing data for same registration number comparison');
+            setCompareVehicle(result.data);
+            setCompareVehicleRawData(result.rawApiData || null);
           } else {
-            // Don't fail completely if comparison vehicle fails, just show error
-            console.warn(`Could not fetch comparison vehicle data: ${compareResult.error}`);
+            try {
+              const compareResult = await vehicleService.getVehicleData({
+                type: 'license-plate',
+                country: 'S',
+                id: compareRegnr
+              });
+
+              if (compareResult.success && compareResult.data) {
+                setCompareVehicle(compareResult.data);
+                setCompareVehicleRawData(compareResult.rawApiData || null); // Store raw API data
+              } else {
+                // Don't fail completely if comparison vehicle fails, just show error
+                console.warn(`Could not fetch comparison vehicle data: ${compareResult.error}`);
+              }
+            } catch (compareError) {
+              // Handle API errors gracefully for comparison vehicle
+              console.warn(`Comparison vehicle API error: ${compareError}`);
+              // Continue without the comparison vehicle rather than failing
+            }
           }
         }
-      } catch (err) {
+      } catch {
         setError('Ett fel uppstod vid hämtning av data');
       } finally {
         setLoading(false);
@@ -102,9 +130,9 @@ export default function Results() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Något gick fel</h1>
           <p className="text-gray-600 mb-6">{error}</p>
-          <a href="/" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-medium">
+          <Link href="/" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-medium">
             Tillbaka till startsidan
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -115,9 +143,9 @@ export default function Results() {
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Inget fordon hittades</h1>
-          <a href="/" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-medium">
+          <Link href="/" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-medium">
             Tillbaka till startsidan
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -127,18 +155,19 @@ export default function Results() {
     <UnlockProvider 
       registrationNumber={regnr || ''} 
       reportType={isComparison ? 'comparison' : 'single'}
+      sessionId={sessionId}
     >
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         
         {/* Back Button */}
         <div className="mb-6">
-          <a href="/" className="inline-flex items-center text-gray-600 hover:text-gray-900">
+          <Link href="/" className="inline-flex items-center text-gray-600 hover:text-gray-900">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Tillbaka
-          </a>
+          </Link>
         </div>
 
         {/* Credit Status & Upgrade Banner */}
@@ -222,7 +251,10 @@ export default function Results() {
                     </svg>
                   </div>
                   <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Kunde inte hämta fordonsdata</h3>
-                  <p className="text-sm sm:text-base text-gray-600">Registreringsnummer {compareRegnr} kunde inte hittas i databasen.</p>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Registreringsnummer {compareRegnr} kunde inte hämtas från demo-API:et. 
+                    Detta kan bero på API-begränsningar för vissa fordon.
+                  </p>
                 </div>
               )}
             </div>
@@ -244,15 +276,11 @@ export default function Results() {
             {vehicleRawData && (
               <HealthMeter 
                 vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined} 
-                isComparison={true} 
               />
             )}
             {compareVehicleRawData && (
               <HealthMeter 
                 vehicleData={compareVehicleRawData}
-                registrationNumber={compareRegnr || undefined} 
-                isComparison={true} 
               />
             )}
           </LockedSection>
@@ -265,8 +293,6 @@ export default function Results() {
             >
               <HealthMeter 
                 vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-                isComparison={false} 
               />
             </LockedSection>
           )
@@ -325,16 +351,10 @@ export default function Results() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
           >
             {vehicle && vehicleRawData && (
-              <VehicleStatus 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <VehicleStatus />
             )}
             {compareVehicle && compareVehicleRawData && (
-              <VehicleStatus 
-                vehicleData={compareVehicleRawData}
-                registrationNumber={compareRegnr || undefined}
-              />
+              <VehicleStatus />
             )}
           </LockedSection>
         ) : (
@@ -344,10 +364,7 @@ export default function Results() {
               sectionName="Fullständig Fordonsstatus"
               className="mb-8"
             >
-              <VehicleStatus 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <VehicleStatus />
             </LockedSection>
           )
         )}
@@ -360,16 +377,10 @@ export default function Results() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
           >
             {vehicle && vehicleRawData && (
-              <OwnerHistory 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <OwnerHistory />
             )}
             {compareVehicle && compareVehicleRawData && (
-              <OwnerHistory 
-                vehicleData={compareVehicleRawData}
-                registrationNumber={compareRegnr || undefined}
-              />
+              <OwnerHistory />
             )}
           </LockedSection>
         ) : (
@@ -379,10 +390,7 @@ export default function Results() {
               sectionName="Fullständig Ägarhistorik & Garanti"
               className="mb-8"
             >
-              <OwnerHistory 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <OwnerHistory />
             </LockedSection>
           )
         )}
@@ -430,16 +438,10 @@ export default function Results() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
           >
             {vehicle && vehicleRawData && (
-              <SafetyAnalysis 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <SafetyAnalysis />
             )}
             {compareVehicle && compareVehicleRawData && (
-              <SafetyAnalysis 
-                vehicleData={compareVehicleRawData}
-                registrationNumber={compareRegnr || undefined}
-              />
+              <SafetyAnalysis />
             )}
           </LockedSection>
         ) : (
@@ -449,10 +451,7 @@ export default function Results() {
               sectionName="Fullständig Säkerhetsanalys"
               className="mb-8"
             >
-              <SafetyAnalysis 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <SafetyAnalysis />
             </LockedSection>
           )
         )}
@@ -465,16 +464,10 @@ export default function Results() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
           >
             {vehicle && vehicleRawData && (
-              <VehicleSpecifications 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <VehicleSpecifications />
             )}
             {compareVehicle && compareVehicleRawData && (
-              <VehicleSpecifications 
-                vehicleData={compareVehicleRawData}
-                registrationNumber={compareRegnr || undefined}
-              />
+              <VehicleSpecifications />
             )}
           </LockedSection>
         ) : (
@@ -484,10 +477,7 @@ export default function Results() {
               sectionName="Fullständig Tekniska Specifikationer"
               className="mb-8"
             >
-              <VehicleSpecifications 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <VehicleSpecifications />
             </LockedSection>
           )
         )}
@@ -500,16 +490,10 @@ export default function Results() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
           >
             {vehicle && vehicleRawData && (
-              <DamageAndService 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <DamageAndService />
             )}
             {compareVehicle && compareVehicleRawData && (
-              <DamageAndService 
-                vehicleData={compareVehicleRawData}
-                registrationNumber={compareRegnr || undefined}
-              />
+              <DamageAndService />
             )}
           </LockedSection>
         ) : (
@@ -519,10 +503,7 @@ export default function Results() {
               sectionName="Fullständig Skade- och Servicehistorik"
               className="mb-8"
             >
-              <DamageAndService 
-                vehicleData={vehicleRawData}
-                registrationNumber={regnr || undefined}
-              />
+              <DamageAndService />
             </LockedSection>
           )
         )}

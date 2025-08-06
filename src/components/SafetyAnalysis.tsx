@@ -1,17 +1,9 @@
 import { useState } from 'react';
-import type { CarInfoApiResponse } from '@/types/vehicle';
 
-interface SafetyAnalysisProps {
-  vehicleData: CarInfoApiResponse;
-  registrationNumber?: string;
-  isComparison?: boolean;
-}
 
-export default function SafetyAnalysis({ 
-  vehicleData, 
-  registrationNumber, 
-  isComparison = false 
-}: SafetyAnalysisProps) {
+// Interface kept for future API integration
+
+export default function SafetyAnalysis() {
   const [isExpanded, setIsExpanded] = useState(false);
   
   // MOCK DATA - Euro NCAP ratings since not available from Car.info API
@@ -40,6 +32,7 @@ export default function SafetyAnalysis({
           <div>
             <h2 className="text-xl font-bold text-gray-900">
               Säkerhetsdata
+              <span className="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">MOCK</span>
             </h2>
             <p className="text-sm text-gray-600">
               Euro NCAP & säkerhetsutrustning

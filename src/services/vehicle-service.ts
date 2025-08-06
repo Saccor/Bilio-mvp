@@ -136,6 +136,11 @@ class VehicleService {
 
       if (!response.ok) {
         if (response.status === 404) return null;
+        // For demo API, treat 500 errors as "not found" rather than failing
+        if (response.status === 500) {
+          console.warn(`Demo API limitation: ${response.status} for ${params.id}`);
+          return null;
+        }
         throw new Error(`Vehicle API error: ${response.status}`);
       }
 

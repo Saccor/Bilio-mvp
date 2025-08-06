@@ -23,6 +23,7 @@ export default function PriceAnalysis({ vehicle, registrationNumber, isCompariso
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">
         Prisanalys{registrationNumber && ` - ${registrationNumber}`}
+        <span className="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">MOCK</span>
       </h2>
       <p className="text-sm text-gray-600 mb-6">Jämförelse mot marknadsvärde</p>
       

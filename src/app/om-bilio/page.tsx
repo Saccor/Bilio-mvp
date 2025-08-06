@@ -3,10 +3,10 @@ export default function OmBilio() {
     <div className="bg-gray-50">
 
       {/* Hero Stats Section */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900 py-24 px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium mb-8">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium mb-6 sm:mb-8">
             <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -14,42 +14,41 @@ export default function OmBilio() {
           </div>
           
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Gör bilköpet transparent<br />
             och tryggt
           </h1>
           
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto mb-16">
-            Sveriges mest omfattande plattform för analys och jämförelse<br />
-            av begagnade bilar
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto mb-12 sm:mb-16 leading-relaxed">
+            Sveriges mest omfattande plattform för analys och jämförelse av begagnade bilar
           </p>
           
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 text-center shadow-xl">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 text-center shadow-xl">
+              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2">
                 10,000+
               </div>
-              <div className="text-gray-600 font-medium">
+              <div className="text-gray-600 font-medium text-sm sm:text-base">
                 jämförelser gjorda
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 text-center shadow-xl">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 text-center shadow-xl">
+              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2">
                 1,000+
               </div>
-              <div className="text-gray-600 font-medium">
+              <div className="text-gray-600 font-medium text-sm sm:text-base">
                 bilmodeller analyserade
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 text-center shadow-xl">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 text-center shadow-xl">
+              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-2">
                 5 sek
               </div>
-              <div className="text-gray-600 font-medium">
+              <div className="text-gray-600 font-medium text-sm sm:text-base">
                 för komplett analys
               </div>
             </div>
@@ -58,38 +57,38 @@ export default function OmBilio() {
       </section>
 
       {/* How Bilio Works Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Så fungerar Bilio
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600">
               Från registreringsnummer till trygg bilaffär på några sekunder
             </p>
           </div>
 
           {/* Steps */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Step 1 */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <div className="flex items-start justify-between">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex-1">
                   <div className="flex items-center mb-4">
-                    <div className="w-10 h-10 bg-gray-900 text-white rounded-xl flex items-center justify-center font-bold mr-4">
+                    <div className="w-10 h-10 bg-gray-900 text-white rounded-xl flex items-center justify-center font-bold mr-4 flex-shrink-0">
                       1
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900">
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
                       Ange registreringsnummer
                     </h3>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
                     Ange registreringsnummer till bilarna du är intresserad av att analysera eller jämföra
                   </p>
                 </div>
-                <div className="ml-8 flex-shrink-0">
-                  <div className="w-16 h-16 text-gray-400">
+                <div className="mt-4 sm:mt-0 sm:ml-8 flex-shrink-0 flex justify-center sm:block">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>

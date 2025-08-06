@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabaseClient';
 
 export default function DebugOAuth() {
   const supabase = createClient();
-  const [debugInfo, setDebugInfo] = useState<any>({});
+  const [debugInfo, setDebugInfo] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
     // Samla all debug-information

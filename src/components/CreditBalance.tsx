@@ -29,6 +29,20 @@ export default function CreditBalance({ showPurchaseLink = true, className = '' 
     };
 
     checkAuthAndFetchCredits();
+
+    // Listen for credit updates
+    const handleCreditsUpdated = (event: CustomEvent) => {
+      const { remainingCredits } = event.detail;
+      if (typeof remainingCredits === 'number') {
+        setCredits(remainingCredits);
+      }
+    };
+
+    window.addEventListener('creditsUpdated', handleCreditsUpdated as EventListener);
+
+    return () => {
+      window.removeEventListener('creditsUpdated', handleCreditsUpdated as EventListener);
+    };
   }, [supabase]);
 
   const fetchCreditBalance = async () => {

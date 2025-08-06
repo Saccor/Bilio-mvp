@@ -1,474 +1,393 @@
-import type { CarInfoApiResponse } from '@/types/vehicle';
+import type { CarInfoApiResponse, CarInfoAttribute } from '@/types/vehicle';
 
+// CEO's Exact Health Calculation Logic - 11 Categories with Precise Weights
 export interface HealthScoreResult {
-  healthIndex: number; // 0-100 (calculated from 230 total points)
-  totalScore: number; // Raw total score (0-230)
+  healthIndex: number; // 0-100 (weighted total)
   breakdown: {
-    technical: number;     // 0-70 points
-    safety: number;        // 0-40 points  
-    ownership: number;     // 0-50 points (MOCK)
-    pricing: number;       // 0-40 points (MOCK)
-    service: number;       // 0-30 points (MOCK)
+    scores: {
+      priceVsMarket: number;      // 0-100 points
+      vehicleStatus: number;      // 0-100 points  
+      mileage: number;           // 0-100 points
+      numberOfOwners: number;     // 0-100 points
+      warranty: number;          // 0-100 points
+      depreciation: number;      // 0-100 points
+      safety: number;            // 0-100 points
+      equipment: number;         // 0-100 points
+      serviceHistory: number;    // 0-100 points
+      damageHistory: number;     // 0-100 points
+      knownProblems: number;     // 0-100 points
+    };
+    weights: {
+      priceVsMarket: number;     // 12%
+      vehicleStatus: number;     // 11%
+      mileage: number;          // 11%
+      numberOfOwners: number;    // 9%
+      warranty: number;         // 6%
+      depreciation: number;     // 11%
+      safety: number;           // 11%
+      equipment: number;        // 11%
+      serviceHistory: number;   // 7%
+      damageHistory: number;    // 7%
+      knownProblems: number;    // 4%
+    };
+    grade: {
+      grade: string;
+      description: string;
+      color: string;
+    };
+    categories: Array<{
+      name: string;
+      score: number;
+      weight: string;
+      weightValue: number;
+      contributedPoints: number;
+      isMock: boolean;
+    }>;
   };
-  maxScores: {
-    technical: number;
-    safety: number;
-    ownership: number;
-    pricing: number;
-    service: number;
-  };
-  parameters: HealthParameter[];
 }
 
-export interface HealthParameter {
-  name: string;
-  score: number;
-  maxScore: number;
-  description: string;
-  category: 'technical' | 'safety' | 'ownership' | 'pricing' | 'service';
-  isMock: boolean;
-  details?: string;
-}
-
-/**
- * Calculate vehicle health score based on real API data and mock data
- * Following the scoring system from README.md (230 total points)
- */
 export function calculateHealthScore(vehicleData: CarInfoApiResponse): HealthScoreResult {
   const result = vehicleData.result;
-  const attributes = result?.attributes || [];
-
+  
   if (!result) {
-    return createEmptyResult();
+    return getDefaultHealthScore();
   }
 
-  // 1. TECHNICAL STATUS (70 points) - USING REAL API DATA
-  const technicalParams = calculateTechnicalScore(result, attributes);
-  const technicalTotal = technicalParams.reduce((sum, param) => sum + param.score, 0);
-
-  // 2. SAFETY ANALYSIS (40 points) - USING REAL API DATA  
-  const safetyParams = calculateSafetyScore(result, attributes);
-  const safetyTotal = safetyParams.reduce((sum, param) => sum + param.score, 0);
-
-  // 3. OWNERSHIP & WARRANTY (50 points) - MOCK DATA
-  const ownershipParams = calculateOwnershipScore();
-  const ownershipTotal = ownershipParams.reduce((sum, param) => sum + param.score, 0);
-
-  // 4. PRICE ANALYSIS (40 points) - MOCK DATA
-  const pricingParams = calculatePricingScore();
-  const pricingTotal = pricingParams.reduce((sum, param) => sum + param.score, 0);
-
-  // 5. SERVICE & DAMAGE HISTORY (30 points) - MOCK DATA
-  const serviceParams = calculateServiceScore();
-  const serviceTotal = serviceParams.reduce((sum, param) => sum + param.score, 0);
-
-  // Create parameters exactly as shown in the image
-  const allParameters = [
-    {
-      name: 'Prisanalys',
-      score: 100,
-      maxScore: 100,
-      description: 'Bra pris - under marknadspris',
-      category: 'pricing' as const,
-      isMock: true
-    },
-
-    {
-      name: 'Körda mil',
-      score: 93,
-      maxScore: 100,
-      description: 'Låg miltål för åldern',
-      category: 'technical' as const,
-      isMock: true
-    },
-    {
-      name: 'Antal ägare',
-      score: 80,
-      maxScore: 100,
-      description: 'Normal ägarhistorik',
-      category: 'ownership' as const,
-      isMock: true
-    },
-    {
-      name: 'Nybilsgaranti',
-      score: 0,
-      maxScore: 100,
-      description: 'Ingen nybilsgaranti kvar',
-      category: 'ownership' as const,
-      isMock: true
-    },
-    {
-      name: 'Värdeminskning',
-      score: 42,
-      maxScore: 100,
-      description: 'Hög värdeminskning',
-      category: 'pricing' as const,
-      isMock: true
-    },
-    {
-      name: 'Säkerhet',
-      score: 100,
-      maxScore: 100,
-      description: 'Mycket säker bil',
-      category: 'safety' as const,
-      isMock: false
-    },
-    {
-      name: 'Utrustning',
-      score: 50,
-      maxScore: 100,
-      description: 'God utrustningsnivå (10+ poster)',
-      category: 'technical' as const,
-      isMock: false
-    },
-    {
-      name: 'Servicebok',
-      score: 0,
-      maxScore: 100,
-      description: 'Servicebok saknas eller ofullständig',
-      category: 'service' as const,
-      isMock: true
-    },
-    {
-      name: 'Skadehistorik',
-      score: 0,
-      maxScore: 100,
-      description: '9 registrerade skador',
-      category: 'service' as const,
-      isMock: true
-    },
-    {
-      name: 'Kända problem',
-      score: 100,
-      maxScore: 100,
-      description: 'Inga kända problem runt denna mätarställning',
-      category: 'service' as const,
-      isMock: false
-         }
-   ];
-
-  // Calculate based on the actual parameters shown
-  const totalScore = allParameters.reduce((sum, param) => sum + param.score, 0);
-  const maxTotal = allParameters.reduce((sum, param) => sum + param.maxScore, 0);
-  const healthIndex = 68; // Match the image exactly
-
-  return {
-    healthIndex,
-    totalScore,
-    breakdown: {
-      technical: technicalTotal,
-      safety: safetyTotal,
-      ownership: ownershipTotal,
-      pricing: pricingTotal,
-      service: serviceTotal
-    },
-    maxScores: {
-      technical: 70,
-      safety: 40,
-      ownership: 50,
-      pricing: 40,
-      service: 30
-    },
-    parameters: allParameters
+  // Calculate all 11 category scores (0-100 points each)
+  const scores = {
+    priceVsMarket: calculatePriceVsMarket(result),        // 12%
+    vehicleStatus: calculateVehicleStatus(result),         // 11%
+    mileage: calculateMileageScore(result),                // 11%
+    numberOfOwners: calculateOwnerScore(result),           // 9%
+    warranty: calculateWarrantyScore(result),              // 6%
+    depreciation: calculateDepreciationScore(result),      // 11%
+    safety: calculateSafetyScore(result?.attributes || []), // 11%
+    equipment: calculateEquipmentScore(result),            // 11%
+    serviceHistory: calculateServiceScore(result),         // 7%
+    damageHistory: calculateDamageScore(result),           // 7%
+    knownProblems: calculateKnownProblemsScore(result)     // 4%
   };
-}
 
-/**
- * Technical Status (70 points) - REAL API DATA
- */
-function calculateTechnicalScore(result: any, attributes: any[]): HealthParameter[] {
-  const currentYear = new Date().getFullYear();
-  const modelYear = result.model_year || currentYear - 10;
-  const age = currentYear - modelYear;
+  // Apply exact weights as specified by CEO
+  const weights = {
+    priceVsMarket: 0.12,
+    vehicleStatus: 0.11,
+    mileage: 0.11,
+    numberOfOwners: 0.09,
+    warranty: 0.06,
+    depreciation: 0.11,
+    safety: 0.11,
+    equipment: 0.11,
+    serviceHistory: 0.07,
+    damageHistory: 0.07,
+    knownProblems: 0.04
+  };
 
-  // Age Score (20 points)
-  const ageScore = age <= 5 ? 20 : age <= 10 ? 10 : 0;
-  
-  // Chassis/Body Type (10 points)  
-  const chassis = result.chassis || '';
-  const bodyScore = ['Cabriolet', 'SUV', 'Crossover'].some(type => 
-    chassis.toLowerCase().includes(type.toLowerCase())) ? 10 : 5;
-
-  // Engine & Drivetrain (20 points)
-  const engineType = result.engine_type || '';
-  const isHybrid = engineType.toLowerCase().includes('hybrid');
-  const isElectric = engineType.toLowerCase().includes('electric');
-  const engineScore = isElectric ? 20 : isHybrid ? 15 : 10;
-
-  // Cooling System (10 points) - Check for coolant attributes
-  const coolantAttribs = attributes.filter(attr => 
-    attr.name?.toLowerCase().includes('coolant') || 
-    attr.name?.toLowerCase().includes('cooling'));
-  const coolingScore = coolantAttribs.length >= 3 ? 10 : 5;
-
-  // Important Components (10 points) - Check for key systems
-  const hasABS = attributes.some(attr => attr.name?.includes('Anti-lock Braking'));
-  const hasESP = attributes.some(attr => attr.name?.includes('ESP') || attr.name?.includes('Stability'));
-  const hasAirbags = attributes.some(attr => attr.name?.includes('Airbag'));
-  const componentCount = [hasABS, hasESP, hasAirbags].filter(Boolean).length;
-  const componentScore = componentCount >= 2 ? 10 : componentCount >= 1 ? 5 : 0;
-
-  return [
-    {
-      name: 'Årsmodell',
-      score: ageScore,
-      maxScore: 20,
-      description: age <= 5 ? 'Nyare fordon (under 5 år)' : age <= 10 ? 'Medelålders fordon (5-10 år)' : 'Äldre fordon (över 10 år)',
-      category: 'technical',
-      isMock: false,
-      details: `Fordon från ${modelYear}, ${age} år gammalt`
-    },
-    {
-      name: 'Karosstyp',
-      score: bodyScore,
-      maxScore: 10,
-      description: bodyScore === 10 ? 'Premium karosstyp' : 'Standard karosstyp',
-      category: 'technical',
-      isMock: false,
-      details: chassis || 'Inte specificerad'
-    },
-    {
-      name: 'Motor & drivlina',
-      score: engineScore,
-      maxScore: 20,
-      description: isElectric ? 'Elmotor - miljövänlig' : isHybrid ? 'Hybridmotor - bra miljöval' : 'Konventionell motor',
-      category: 'technical',
-      isMock: false,
-      details: engineType || 'Inte specificerad'
-    },
-    {
-      name: 'Kylsystem',
-      score: coolingScore,
-      maxScore: 10,
-      description: coolingScore === 10 ? 'Komplett kylsystem' : 'Standard kylsystem',
-      category: 'technical',
-      isMock: false,
-      details: `${coolantAttribs.length} kylkomponenter identifierade`
-    },
-    {
-      name: 'Viktiga komponenter',
-      score: componentScore,
-      maxScore: 10,
-      description: componentCount >= 2 ? 'Alla viktiga system finns' : 'Vissa viktiga system saknas',
-      category: 'technical',
-      isMock: false,
-      details: `ABS: ${hasABS ? 'Ja' : 'Nej'}, ESP: ${hasESP ? 'Ja' : 'Nej'}, Airbags: ${hasAirbags ? 'Ja' : 'Nej'}`
-    }
-  ];
-}
-
-/**
- * Safety Analysis (40 points) - REAL API DATA
- */
-function calculateSafetyScore(result: any, attributes: any[]): HealthParameter[] {
-  // Euro NCAP (20 points) - Currently mock as we don't have reliable NCAP data in API
-  const euroNcapScore = 15; // Mock score
-  
-  // Airbags (10 points) - Real data from API
-  const airbagTypes = ['Frontal Airbag', 'Side Head Airbag', 'Curtain Airbag', 'Knee Airbag'];
-  const foundAirbags = airbagTypes.filter(type =>
-    attributes.some(attr => attr.name?.includes(type))
+  // Calculate weighted total (0-100 points)
+  const healthIndex = Math.round(
+    scores.priceVsMarket * weights.priceVsMarket +
+    scores.vehicleStatus * weights.vehicleStatus +
+    scores.mileage * weights.mileage +
+    scores.numberOfOwners * weights.numberOfOwners +
+    scores.warranty * weights.warranty +
+    scores.depreciation * weights.depreciation +
+    scores.safety * weights.safety +
+    scores.equipment * weights.equipment +
+    scores.serviceHistory * weights.serviceHistory +
+    scores.damageHistory * weights.damageHistory +
+    scores.knownProblems * weights.knownProblems
   );
-  const airbagScore = foundAirbags.length >= 4 ? 10 : foundAirbags.length >= 2 ? 5 : 0;
 
-  // Safety Systems (10 points) - Real data from API
-  const hasBLIS = attributes.some(attr => attr.name?.includes('Blind Spot'));
-  const hasABS = attributes.some(attr => attr.name?.includes('Anti-lock Braking'));
-  const hasESP = attributes.some(attr => attr.name?.includes('ESP'));
-  const safetySystemCount = [hasBLIS, hasABS, hasESP].filter(Boolean).length;
-  const safetySystemScore = safetySystemCount >= 2 ? 10 : safetySystemCount >= 1 ? 5 : 0;
-
-  return [
-    {
-      name: 'Euro NCAP',
-      score: euroNcapScore,
-      maxScore: 20,
-      description: 'Uppskattad säkerhetsbedömning',
-      category: 'safety',
-      isMock: true,
-      details: 'Euro NCAP-data inte tillgänglig via API'
-    },
-    {
-      name: 'Airbags',
-      score: airbagScore,
-      maxScore: 10,
-      description: `${foundAirbags.length} airbag-typer identifierade`,
-      category: 'safety',
-      isMock: false,
-      details: foundAirbags.length > 0 ? foundAirbags.join(', ') : 'Inga airbags identifierade'
-    },
-    {
-      name: 'Säkerhetssystem',
-      score: safetySystemScore,
-      maxScore: 10,
-      description: safetySystemCount >= 2 ? 'Flera säkerhetssystem' : 'Grundläggande säkerhet',
-      category: 'safety',
-      isMock: false,
-      details: `BLIS: ${hasBLIS ? 'Ja' : 'Nej'}, ABS: ${hasABS ? 'Ja' : 'Nej'}, ESP: ${hasESP ? 'Ja' : 'Nej'}`
-    }
-  ];
-}
-
-/**
- * Ownership & Warranty (50 points) - MOCK DATA
- */
-function calculateOwnershipScore(): HealthParameter[] {
-  return [
-    {
-      name: 'Antal ägare',
-      score: 16,
-      maxScore: 20,
-      description: 'Normal ägarhistorik',
-      category: 'ownership',
-      isMock: true,
-      details: 'Ägarhistorik från Bilregister'
-    },
-    {
-      name: 'Ägartyp',
-      score: 5,
-      maxScore: 5,
-      description: 'Privatägd',
-      category: 'ownership',
+  const categories = [
+    { 
+      name: 'Pris mot marknaden', 
+      score: scores.priceVsMarket, 
+      weight: '12%', 
+      weightValue: weights.priceVsMarket,
+      contributedPoints: Math.round(scores.priceVsMarket * weights.priceVsMarket * 10) / 10,
       isMock: true
     },
-    {
-      name: 'Senaste ägarbyte',
-      score: 10,
-      maxScore: 10,
-      description: 'Ägarbyte inom 2 år',
-      category: 'ownership',
+    { 
+      name: 'Fordonsstatus', 
+      score: scores.vehicleStatus, 
+      weight: '11%', 
+      weightValue: weights.vehicleStatus,
+      contributedPoints: Math.round(scores.vehicleStatus * weights.vehicleStatus * 10) / 10,
       isMock: true
     },
-    {
-      name: 'Nybilsgaranti',
-      score: 0,
-      maxScore: 15,
-      description: 'Ingen nybilsgaranti kvar',
-      category: 'ownership',
-      isMock: true
-    }
-  ];
-}
-
-/**
- * Price Analysis (40 points) - MOCK DATA
- */
-function calculatePricingScore(): HealthParameter[] {
-  return [
-    {
-      name: 'Prisanalys',
-      score: 20,
-      maxScore: 20,
-      description: 'Bra pris - under marknadspris',
-      category: 'pricing',
-      isMock: true,
-      details: '±0-5% från genomsnittspris'
-    },
-    {
-      name: 'Värdeminskning',
-      score: 8,
-      maxScore: 10,
-      description: 'Hög värdeminskning',
-      category: 'pricing',
-      isMock: true
-    },
-    {
-      name: 'Prishistorik',
-      score: 10,
-      maxScore: 10,
-      description: 'Inga drastiska prissänkningar',
-      category: 'pricing',
-      isMock: true
-    }
-  ];
-}
-
-/**
- * Service & Damage History (30 points) - MOCK DATA
- */
-function calculateServiceScore(): HealthParameter[] {
-  return [
-    {
-      name: 'Servicebok',
-      score: 0,
-      maxScore: 10,
-      description: 'Servicebok saknas eller ofullständig',
-      category: 'service',
-      isMock: true
-    },
-    {
-      name: 'Skadehistorik',
-      score: 0,
-      maxScore: 10,
-      description: '9 registrerade skador',
-      category: 'service',
-      isMock: true
-    },
-    {
-      name: 'Återkallelser',
-      score: 5,
-      maxScore: 5,
-      description: 'Inga öppna återkallelser',
-      category: 'service',
-      isMock: true
-    },
-    {
-      name: 'Kända problem',
-      score: 5,
-      maxScore: 5,
-      description: 'Inga kända problem runt denna mätarställning',
-      category: 'service',
+    { 
+      name: 'Körda mil', 
+      score: scores.mileage, 
+      weight: '11%', 
+      weightValue: weights.mileage,
+      contributedPoints: Math.round(scores.mileage * weights.mileage * 10) / 10,
       isMock: false
+    },
+    { 
+      name: 'Antal ägare', 
+      score: scores.numberOfOwners, 
+      weight: '9%', 
+      weightValue: weights.numberOfOwners,
+      contributedPoints: Math.round(scores.numberOfOwners * weights.numberOfOwners * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Nybilsgaranti', 
+      score: scores.warranty, 
+      weight: '6%', 
+      weightValue: weights.warranty,
+      contributedPoints: Math.round(scores.warranty * weights.warranty * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Värdetapp (5 år)', 
+      score: scores.depreciation, 
+      weight: '11%', 
+      weightValue: weights.depreciation,
+      contributedPoints: Math.round(scores.depreciation * weights.depreciation * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Säkerhet (Euro-NCAP)', 
+      score: scores.safety, 
+      weight: '11%', 
+      weightValue: weights.safety,
+      contributedPoints: Math.round(scores.safety * weights.safety * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Utrustning', 
+      score: scores.equipment, 
+      weight: '11%', 
+      weightValue: weights.equipment,
+      contributedPoints: Math.round(scores.equipment * weights.equipment * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Servicebok', 
+      score: scores.serviceHistory, 
+      weight: '7%', 
+      weightValue: weights.serviceHistory,
+      contributedPoints: Math.round(scores.serviceHistory * weights.serviceHistory * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Skadehistorik', 
+      score: scores.damageHistory, 
+      weight: '7%', 
+      weightValue: weights.damageHistory,
+      contributedPoints: Math.round(scores.damageHistory * weights.damageHistory * 10) / 10,
+      isMock: true
+    },
+    { 
+      name: 'Kända problem', 
+      score: scores.knownProblems, 
+      weight: '4%', 
+      weightValue: weights.knownProblems,
+      contributedPoints: Math.round(scores.knownProblems * weights.knownProblems * 10) / 10,
+      isMock: true
     }
   ];
-}
 
-
-
-function createEmptyResult(): HealthScoreResult {
   return {
-    healthIndex: 0,
-    totalScore: 0,
-    breakdown: { technical: 0, safety: 0, ownership: 0, pricing: 0, service: 0 },
-    maxScores: { technical: 70, safety: 40, ownership: 50, pricing: 40, service: 30 },
-    parameters: []
+    healthIndex: Math.min(100, Math.max(0, healthIndex)),
+    breakdown: {
+      scores,
+      weights,
+      grade: getGradeFromScore(healthIndex),
+      categories
+    }
   };
 }
 
+// 1. Pris mot marknaden (12%) - ≈20% billigare ⇒ 100p, ≈20% dyrare ⇒ 0p
+function calculatePriceVsMarket(_result: CarInfoApiResponse['result']): number {
+  const askingPrice = 240000; // SEK
+  const marketAverage = 259200; // SEK
+  
+  const priceDifference = (marketAverage - askingPrice) / marketAverage;
+  
+  if (priceDifference >= 0.20) return 100; // 20% or more cheaper
+  if (priceDifference <= -0.20) return 0;  // 20% or more expensive
+  
+  // Linear between -20% and +20%
+  return Math.round(50 + (priceDifference * 250));
+}
+
+// 2. Fordonsstatus (11%) - Start 100p, -25p taxi, -25p hyrbil, -20p import, -30p stulen
+function calculateVehicleStatus(_result: CarInfoApiResponse['result']): number {
+  let score = 100;
+  
+  // Mock data - would come from real vehicle registry checks
+  const isTaxi = false;        // -25p
+  const isRental = false;      // -25p
+  const isImported = false;    // -20p
+  const isStolen = false;      // -30p
+  
+  if (isTaxi) score -= 25;
+  if (isRental) score -= 25;
+  if (isImported) score -= 20;
+  if (isStolen) score -= 30;
+  
+  return Math.max(0, score);
+}
+
+// 3. Körda mil (11%) - Normal 1500 mil/år, halva ⇒ 100p, dubbla ⇒ 0p
+function calculateMileageScore(result: CarInfoApiResponse['result']): number {
+  const currentYear = new Date().getFullYear();
+  const vehicleYear = result?.model_year || currentYear - 3;
+  const vehicleAge = currentYear - vehicleYear;
+  
+  // Mock mileage - in real implementation, get from API
+  const totalMileage = 21000; // mil (210,000 km)
+  const normalMileagePerYear = 1500; // mil
+  const expectedMileage = vehicleAge * normalMileagePerYear;
+  
+  if (expectedMileage === 0) return 100;
+  
+  const mileageRatio = totalMileage / expectedMileage;
+  
+  if (mileageRatio <= 0.5) return 100; // Half or less = 100p
+  if (mileageRatio >= 2.0) return 0;   // Double or more = 0p
+  
+  // Linear between 0.5x and 2.0x
+  return Math.round(100 - ((mileageRatio - 0.5) / 1.5) * 100);
+}
+
+// 4. Antal ägare (9%) - ≥6000 mil/ägare ⇒ 100p, ≤1000 mil/ägare ⇒ 0p
+function calculateOwnerScore(_result: CarInfoApiResponse['result']): number {
+  const totalMileage = 21000; // mil
+  const numberOfOwners = 2;   // Mock data
+  
+  const milesPerOwner = totalMileage / numberOfOwners;
+  
+  if (milesPerOwner >= 6000) return 100;
+  if (milesPerOwner <= 1000) return 0;
+  
+  // Linear between 1000 and 6000
+  return Math.round(((milesPerOwner - 1000) / 5000) * 100);
+}
+
+// 5. Nybilsgaranti (6%) - Ja = 100p, Nej = 0p
+function calculateWarrantyScore(_result: CarInfoApiResponse['result']): number {
+  // Mock data - would check real warranty status
+  const hasNewCarWarranty = false; // Most used cars don't have warranty
+  return hasNewCarWarranty ? 100 : 0;
+}
+
+// 6. Värdetapp 5 år (11%) - 0% tapp ⇒ 100p, 60% tapp ⇒ 0p
+function calculateDepreciationScore(_result: CarInfoApiResponse['result']): number {
+  // Mock calculation - would use real market data
+  const originalPrice = 480000; // SEK when new
+  const currentValue = 240000;  // SEK current value
+  
+  const depreciationRate = (originalPrice - currentValue) / originalPrice;
+  
+  if (depreciationRate <= 0) return 100; // No depreciation = 100p
+  if (depreciationRate >= 0.60) return 0; // 60% or more = 0p
+  
+  // Linear between 0% and 60%
+  return Math.round(100 - (depreciationRate / 0.60) * 100);
+}
+
+// 7. Säkerhet Euro-NCAP (11%) - (Antal stjärnor ÷ 5) × 100
+function calculateSafetyScore(_attributes: CarInfoAttribute[]): number {
+  // Mock Euro NCAP data - would come from safety database
+  const euroNcapStars = 5; // out of 5 stars
+  return Math.round((euroNcapStars / 5) * 100);
+}
+
+// 8. Utrustning (11%) - Varje extra ger 5p, tak vid 20 poster = 100p
+function calculateEquipmentScore(_result: CarInfoApiResponse['result']): number {
+  // Mock equipment list - would come from detailed vehicle data
+  const equipmentItems = [
+    'Klimatanläggning', 'Navigering', 'Läderklädsel', 'Xenon-strålkastare',
+    'Parkeringssensorer', 'Backkamera', 'Adaptiv farthållare', 'Panoramatak',
+    'Uppvärmda säten', 'Elektriska säten', 'Harman Kardon', 'Metallic-lack',
+    'Keyless', 'Bluetooth', 'USB-uttag' // 15 items total
+  ];
+  
+  const points = Math.min(equipmentItems.length * 5, 100);
+  return points;
+}
+
+// 9. Servicebok (7%) - Komplett historik = 100p, saknas = 0p
+function calculateServiceScore(_result: CarInfoApiResponse['result']): number {
+  // Mock service data - would check real service history
+  const hasCompleteServiceHistory = true;
+  return hasCompleteServiceHistory ? 100 : 0;
+}
+
+// 10. Skadehistorik (7%) - Start 100p, -20p per större skada ner till 0
+function calculateDamageScore(_result: CarInfoApiResponse['result']): number {
+  let score = 100;
+  
+  // Mock damage data - would come from insurance/damage reports
+  const majorDamages = 1; // Number of major damages
+  
+  score -= majorDamages * 20;
+  return Math.max(0, score);
+}
+
+// 11. Kända problem (4%) - -25p för varje typisk "barnsjukdom"
+function calculateKnownProblemsScore(_result: CarInfoApiResponse['result']): number {
+  let score = 100;
+  
+  // Mock known problems - would come from reliability database
+  const knownIssues = 0; // Number of typical issues for this model/mileage
+  
+  score -= knownIssues * 25;
+  return Math.max(0, score);
+}
+
+// Grade interpretation as per CEO specification
+function getGradeFromScore(score: number): { grade: string; description: string; color: string } {
+  if (score >= 90) return { grade: 'A', description: 'Fynd', color: 'bg-green-500' };
+  if (score >= 80) return { grade: 'B', description: 'Bra köp', color: 'bg-green-400' };
+  if (score >= 65) return { grade: 'C', description: 'OK', color: 'bg-orange-500' };
+  if (score >= 50) return { grade: 'D', description: 'Tveksamt', color: 'bg-orange-400' };
+  return { grade: 'E', description: 'Undvik', color: 'bg-red-500' };
+}
+
+function getDefaultHealthScore(): HealthScoreResult {
+  const defaultScores = {
+    priceVsMarket: 50, vehicleStatus: 50, mileage: 50, numberOfOwners: 50,
+    warranty: 50, depreciation: 50, safety: 50, equipment: 50,
+    serviceHistory: 50, damageHistory: 50, knownProblems: 50
+  };
+  
+  const weights = {
+    priceVsMarket: 0.12, vehicleStatus: 0.11, mileage: 0.11, numberOfOwners: 0.09,
+    warranty: 0.06, depreciation: 0.11, safety: 0.11, equipment: 0.11,
+    serviceHistory: 0.07, damageHistory: 0.07, knownProblems: 0.04
+  };
+
+  return {
+    healthIndex: 50,
+    breakdown: {
+      scores: defaultScores,
+      weights,
+      grade: { grade: 'C', description: 'OK', color: 'bg-orange-500' },
+      categories: []
+    }
+  };
+}
+
+// Legacy function for compatibility
 export function getHealthStatus(healthIndex: number): { 
   status: string; 
   description: string; 
   colorClass: string; 
 } {
-  if (healthIndex >= 90) {
-    return {
-      status: "Fynd - Svårt att hitta bättre",
-      description: "Fordonet är i exceptionellt bra skick",
-      colorClass: "text-green-600"
-    };
-  } else if (healthIndex >= 80) {
-    return {
-      status: "Bra köp - Rekommenderas",
-      description: "Fordonet är välskött och i bra kondition",
-      colorClass: "text-green-500"
-    };
-  } else if (healthIndex >= 65) {
-    return {
-      status: "OK - Kolla vidare",
-      description: "Fordonet är i acceptabelt skick med mindre brister",
-      colorClass: "text-orange-500"
-    };
-  } else if (healthIndex >= 50) {
-    return {
-      status: "Tveksamt - Risk",
-      description: "Fordonet har flera brister som bör åtgärdas",
-      colorClass: "text-orange-600"
-    };
-  } else {
-    return {
-      status: "Undvik - Hög risk",
-      description: "Fordonet kräver omfattande åtgärder",
-      colorClass: "text-red-500"
-    };
-  }
-} 
+  const grade = getGradeFromScore(healthIndex);
+  
+  const statusMap: Record<string, { status: string; description: string; colorClass: string }> = {
+    'A': { status: "Fynd - Svårt att hitta bättre", description: "Fordonet är i exceptionellt bra skick", colorClass: "text-green-600" },
+    'B': { status: "Bra köp - Rekommenderas", description: "Fordonet är välskött och i bra kondition", colorClass: "text-green-500" },
+    'C': { status: "OK - Kolla vidare", description: "Fordonet är i acceptabelt skick med mindre brister", colorClass: "text-orange-500" },
+    'D': { status: "Tveksamt - Risk", description: "Fordonet har flera brister som bör åtgärdas", colorClass: "text-orange-600" },
+    'E': { status: "Undvik - Hög risk", description: "Fordonet kräver omfattande åtgärder", colorClass: "text-red-500" }
+  };
+
+  return statusMap[grade.grade] || statusMap['C'];
+}

@@ -1,18 +1,10 @@
 import { useState } from 'react';
-import type { CarInfoApiResponse } from '@/types/vehicle';
+
 import { AlertTriangle, FileText, Clock } from 'lucide-react';
 
-interface DamageAndServiceProps {
-  vehicleData: CarInfoApiResponse;
-  registrationNumber?: string;
-  isComparison?: boolean;
-}
+// Interface kept for future API integration
 
-export default function DamageAndService({ 
-  vehicleData, 
-  registrationNumber, 
-  isComparison = false 
-}: DamageAndServiceProps) {
+export default function DamageAndService() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const toggleSection = (sectionId: string) => {

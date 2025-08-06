@@ -1,17 +1,9 @@
-import type { CarInfoApiResponse } from '@/types/vehicle';
+
 import { Users } from 'lucide-react';
 
-interface OwnerHistoryProps {
-  vehicleData: CarInfoApiResponse;
-  registrationNumber?: string;
-  isComparison?: boolean;
-}
+// Interface kept for future API integration
 
-export default function OwnerHistory({ 
-  vehicleData, 
-  registrationNumber, 
-  isComparison = false 
-}: OwnerHistoryProps) {
+export default function OwnerHistory() {
   
   // Ownership and warranty data - MOCK DATA since not available from Car.info API
   const ownershipData = [
@@ -48,6 +40,7 @@ export default function OwnerHistory({
         <div>
           <h2 className="text-xl font-bold text-gray-900">
             Ägarhistorik & Garanti
+            <span className="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">MOCK</span>
           </h2>
           <p className="text-sm text-gray-600">
             Information om tidigare ägare och garantistatus
